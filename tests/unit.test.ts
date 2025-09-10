@@ -1,7 +1,7 @@
-import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import {
   prepareScanXModule as prepareScanXFullModule,

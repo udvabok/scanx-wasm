@@ -82,10 +82,22 @@ export function setScanXModuleOverrides(
 export async function writeBarcode(
   input: string | Uint8Array,
   writerOptions?: WriterOptions,
+  cdnHost?: string,
 ) {
-  return writeBarcodeWithFactory(ScanXModuleFactory, input, writerOptions);
+  return writeBarcodeWithFactory(
+    ScanXModuleFactory,
+    input,
+    writerOptions,
+    cdnHost,
+  );
 }
 
 export * from "../bindings/exposedWriterBindings.js";
-export { SCANX_CPP_COMMIT, SCANX_WASM_VERSION, type PrepareScanXModuleOptions, type ScanXModuleOverrides, type ScanXWriterModule } from "../share.js";
+export {
+  type PrepareScanXModuleOptions,
+  SCANX_CPP_COMMIT,
+  SCANX_WASM_VERSION,
+  type ScanXModuleOverrides,
+  type ScanXWriterModule,
+} from "../share.js";
 export const SCANX_WASM_SHA256 = WRITER_HASH;

@@ -2,7 +2,7 @@
   "name": "scanx-wasm",
   "description": "Scanx-C++ WebAssembly as an ES/CJS module with types",
   "private": false,
-  "version": "2.2.1",
+  "version": "2.2.13",
   "type": "module",
   "files": [
     "./dist"
@@ -119,12 +119,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sec-ant/scanx-wasm.git"
+    "url": "git+https://github.com/udvabok/scanx.git"
   },
-  "homepage": "https://github.com/Sec-ant/scanx-wasm",
+  "homepage": "https://github.com/udvabok/scanx",
   "bugs": {
-    "url": "https://github.com/Sec-ant/scanx-wasm/issues",
-    "email": "zezhengwu@proton.me"
+    "url": "https://github.com/udvabok/scanx/issues",
+    "email": "udvabok@gmail.com"
   },
   "keywords": [
     "qrcode",
@@ -136,7 +136,7 @@
     "webassembly"
   ],
   "author": {
-    "name": "Ze-Zheng Wu"
+    "name": "udvabok"
   },
   "license": "MIT",
   "publishConfig": {

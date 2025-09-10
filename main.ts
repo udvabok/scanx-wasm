@@ -1,10 +1,9 @@
 ///<reference types="vite/client"/>
 
-// biome-ignore assist/source/organizeImports: <explanation>
 import {
   type ReaderOptions,
-  type WriterOptions,
   readBarcodes,
+  type WriterOptions,
   writeBarcode,
 } from "./src/full/index.js";
 

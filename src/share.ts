@@ -3,8 +3,8 @@ import {
   defaultReaderOptions,
   defaultWriterOptions,
   type ReaderOptions,
-  readerOptionsToScanXReaderOptions,
   type ReadResult,
+  readerOptionsToScanXReaderOptions,
   type ScanXReaderOptions,
   type ScanXReadResult,
   ScanXReadResultToReadResult,
@@ -34,6 +34,12 @@ export interface ScanXReaderModule extends EmscriptenModule {
     imgHeight: number,
     ScanXReaderOptions: ScanXReaderOptions,
   ): ScanXVector<ScanXReadResult>;
+  readSingleBarcodeFromPixmap(
+    bufferPtr: number,
+    imgWidth: number,
+    imgHeight: number,
+    ScanXReaderOptions: ScanXReaderOptions,
+  ): ScanXReadResult;
 }
 
 /**
@@ -83,12 +89,13 @@ export const SCANX_WASM_VERSION = NPM_PACKAGE_VERSION;
 
 export const SCANX_CPP_COMMIT = SUBMODULE_COMMIT;
 
-const DEFAULT_MODULE_OVERRIDES: ScanXModuleOverrides =
-  import.meta.env.MODE === "miniprogram"
-    ? {
-        instantiateWasm() {
-          throw Error(
-            `To use scanx-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
+const getDefaultModuleOverrides = (cdnHost?: string) => {
+  const DEFAULT_MODULE_OVERRIDES: ScanXModuleOverrides =
+    import.meta.env.MODE === "miniprogram"
+      ? {
+          instantiateWasm() {
+            throw Error(
+              `To use scanx-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
 
 prepareScanXModule({
   overrides: {
@@ -106,28 +113,31 @@ Learn more:
 - https://emscripten.org/docs/api_reference/module.html#Module.instantiateWasm
 - https://github.com/Sec-ant/scanx-wasm#integrating-in-non-web-runtimes
 `,
-          );
-        },
-      }
-    : import.meta.env.PROD
-      ? {
-          locateFile: (path, prefix) => {
-            const match = path.match(/_(.+?)\.wasm$/);
-            if (match) {
-              return `https://fastly.jsdelivr.net/npm/scanx-wasm@${NPM_PACKAGE_VERSION}/dist/${match[1]}/${path}`;
-            }
-            return prefix + path;
+            );
           },
         }
-      : {
-          locateFile: (path, prefix) => {
-            const match = path.match(/_(.+?)\.wasm$/);
-            if (match) {
-              return `/src/${match[1]}/${path}`;
-            }
-            return prefix + path;
-          },
-        };
+      : import.meta.env.PROD
+        ? {
+            locateFile: (path, prefix) => {
+              const match = path.match(/_(.+?)\.wasm$/);
+              if (match) {
+                return `${cdnHost ?? `https://fastly.jsdelivr.net/npm/scanx-wasm@${NPM_PACKAGE_VERSION}`}/dist/${match[1]}/${path}`;
+              }
+              return prefix + path;
+            },
+          }
+        : {
+            locateFile: (path, prefix) => {
+              const match = path.match(/_(.+?)\.wasm$/);
+              if (match) {
+                return `/src/${match[1]}/${path}`;
+              }
+              return prefix + path;
+            },
+          };
+
+  return DEFAULT_MODULE_OVERRIDES;
+};
 
 type CachedValue<T extends ScanXModuleType = ScanXModuleType> =
   | [ScanXModuleOverrides]
@@ -141,6 +151,12 @@ export interface PrepareScanXModuleOptions {
    * The `locateFile` function is overridden by default to load the WASM file from the jsDelivr CDN.
    */
   overrides?: ScanXModuleOverrides;
+  /**
+   * Custom CDN host URL to load WASM files from.
+   * If provided, this will override the default jsDelivr CDN URL.
+   * @example "https://my-custom-cdn.com/scanx-wasm"
+   */
+  cdnHost?: string;
   /**
    * A function to compare the cached overrides with the input overrides.
    * So that the module promise can be reused if the overrides are the same.
@@ -224,18 +240,20 @@ export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
  * This function implements a caching mechanism for ScanX module instances. It stores
  * both the module overrides and the instantiated module promise in a global cache.
  */
+
 export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   {
     overrides,
     equalityFn = shallow,
     fireImmediately = false,
+    cdnHost,
   }: PrepareScanXModuleOptions = {},
 ) {
   // look up the cached overrides and module promise
   const [cachedOverrides, cachedPromise] = (__CACHE__.get(ScanXModuleFactory) as
     | CachedValue<T>
-    | undefined) ?? [DEFAULT_MODULE_OVERRIDES];
+    | undefined) ?? [getDefaultModuleOverrides(cdnHost)];
 
   // resolve the input overrides
   const resolvedOverrides = overrides ?? cachedOverrides;
@@ -298,6 +316,7 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions: ReaderOptions = defaultReaderOptions,
+  cdnHost?: string,
 ) {
   const requiredReaderOptions: Required<ReaderOptions> = {
     ...defaultReaderOptions,
@@ -305,6 +324,7 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
   };
   const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
     fireImmediately: true,
+    cdnHost,
   });
   let ScanXReadResultVector: ScanXVector<ScanXReadResult>;
   let bufferPtr: number;
@@ -359,6 +379,108 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
 }
 
 /**
+ * Reads a single barcode from an image using a ScanX module factory.
+ *
+ * @param ScanXModuleFactory - Factory function to create a ScanX module instance
+ * @param input - Source image data as a Blob, ArrayBuffer, Uint8Array, or ImageData
+ * @param readerOptions - Optional configuration options for barcode reading (defaults to defaultReaderOptions)
+ * @returns A single ReadResult object containing decoded barcode information or null if no barcode is found
+ *
+ * @remarks
+ * This function is optimized to detect a single barcode and return immediately upon detection.
+ * It's more efficient than readBarcodesWithFactory when only one barcode is expected.
+ */
+export async function readSingleBarcodeWithFactory<T extends "reader" | "full">(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
+  input: Blob | ArrayBuffer | Uint8Array | ImageData,
+  readerOptions: ReaderOptions = defaultReaderOptions,
+  cdnHost?: string,
+) {
+  const requiredReaderOptions: Required<ReaderOptions> = {
+    ...defaultReaderOptions,
+    ...readerOptions,
+  };
+
+  const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
+    fireImmediately: true,
+    cdnHost,
+  });
+
+  let result: ScanXReadResult | null = null;
+  let bufferPtr = 0; // Initialize to 0 to indicate "not allocated yet"
+
+  try {
+    if ("width" in input && "height" in input && "data" in input) {
+      /* ImageData */
+      const {
+        data: buffer,
+        data: { byteLength: size },
+        width,
+        height,
+      } = input;
+      bufferPtr = ScanXModule._malloc(size);
+      ScanXModule.HEAPU8.set(buffer, bufferPtr);
+
+      result = ScanXModule.readSingleBarcodeFromPixmap(
+        bufferPtr,
+        width,
+        height,
+        readerOptionsToScanXReaderOptions(requiredReaderOptions),
+      );
+    } else {
+      let size: number;
+      let buffer: Uint8Array;
+
+      if ("buffer" in input) {
+        /* Uint8Array */
+        [size, buffer] = [input.byteLength, input];
+      } else if ("byteLength" in input) {
+        /* ArrayBuffer */
+        [size, buffer] = [input.byteLength, new Uint8Array(input)];
+      } else if ("size" in input) {
+        /* Blob */
+        [size, buffer] = [
+          input.size,
+          new Uint8Array(await input.arrayBuffer()),
+        ];
+      } else {
+        throw new TypeError("Invalid input type");
+      }
+
+      bufferPtr = ScanXModule._malloc(size);
+      ScanXModule.HEAPU8.set(buffer, bufferPtr);
+
+      const results = ScanXModule.readBarcodesFromImage(
+        bufferPtr,
+        size,
+        readerOptionsToScanXReaderOptions(requiredReaderOptions),
+      );
+
+      if (results.size() > 0) {
+        const firstResult = results.get(0);
+        if (firstResult !== undefined) {
+          result = firstResult;
+        }
+      }
+    }
+
+    // Clean up allocated memory
+    if (bufferPtr) {
+      ScanXModule._free(bufferPtr);
+    }
+
+    // Convert result if found
+    return result ? ScanXReadResultToReadResult(result) : null;
+  } catch (error) {
+    // Ensure memory is freed even if an error occurs
+    if (bufferPtr) {
+      ScanXModule._free(bufferPtr);
+    }
+    throw error;
+  }
+}
+
+/**
  * Generates a barcode image using a ScanX module factory with support for text and binary input.
  *
  * @param ScanXModuleFactory - The factory function that creates a ScanX module instance
@@ -374,6 +496,7 @@ export async function writeBarcodeWithFactory<T extends "writer" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: string | Uint8Array,
   writerOptions: WriterOptions = defaultWriterOptions,
+  cdnHost?: string,
 ) {
   const requiredWriterOptions: Required<WriterOptions> = {
     ...defaultWriterOptions,
@@ -384,6 +507,7 @@ export async function writeBarcodeWithFactory<T extends "writer" | "full">(
   );
   const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
     fireImmediately: true,
+    cdnHost,
   });
   if (typeof input === "string") {
     return ScanXWriteResultToWriteResult(

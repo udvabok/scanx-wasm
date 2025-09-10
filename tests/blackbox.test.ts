@@ -11,8 +11,8 @@ import {
 } from "vitest";
 import {
   prepareScanXModule,
-  readBarcodes,
   type ReaderOptions,
+  readBarcodes,
 } from "../src/reader/index.js";
 import { testEntries } from "./testEntries.js";
 import {

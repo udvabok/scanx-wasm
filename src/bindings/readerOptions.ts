@@ -124,7 +124,7 @@ export interface ReaderOptions
       "formats" | "binarizer" | "eanAddOnSymbol" | "textMode" | "characterSet"
     >
   > {
-    accessToken: string;
+  accessToken: string;
   /**
    * A set of {@link ReadInputBarcodeFormat | `ReadInputBarcodeFormat`}s that should be searched for.
    * An empty list `[]` indicates all supported formats.

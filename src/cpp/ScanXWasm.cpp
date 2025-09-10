@@ -410,7 +410,7 @@ JsReadResults readBarcodesFromPixmap(int bufferPtr, int width, int height, const
 
 // ------------------ New single barcode function ------------------
 JsReadResult readSingleBarcodeFromPixmap(int dataPtr, int width, int height, const JsReaderOptions &options) {
-  auto results = readBarcodesFromPixmap(dataPtr, width, height, options);
+  auto results = readBarcodes({reinterpret_cast<const uint8_t *>(dataPtr), width, height, ZXing::ImageFormat::RGBA}, options);
   if (!results.empty()) {
     return results.front();
   }

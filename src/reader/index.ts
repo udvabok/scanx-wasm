@@ -5,6 +5,7 @@ import {
   prepareScanXModuleWithFactory,
   purgeScanXModuleWithFactory,
   readBarcodesWithFactory,
+  readSingleBarcodeWithFactory,
   type ScanXModuleOverrides,
   type ScanXReaderModule,
 } from "../share.js";
@@ -75,18 +76,36 @@ export function setScanXModuleOverrides(
 export async function readBarcodes(
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions?: ReaderOptions,
+  cdnHost?: string,
 ) {
-  return readBarcodesWithFactory(ScanXModuleFactory, input, readerOptions);
+  return readBarcodesWithFactory(
+    ScanXModuleFactory,
+    input,
+    readerOptions,
+    cdnHost,
+  );
 }
-
+export async function readSingleBarcode(
+  input: Blob | ArrayBuffer | Uint8Array | ImageData,
+  readerOptions?: ReaderOptions,
+  cdnHost?: string,
+) {
+  return readSingleBarcodeWithFactory(
+    ScanXModuleFactory,
+    input,
+    readerOptions,
+    cdnHost,
+  );
+}
 /**
  * @deprecated Use {@link readBarcodes | `readBarcodes`} instead.
  */
 export async function readBarcodesFromImageFile(
   imageFile: Blob,
   readerOptions?: ReaderOptions,
+  cdnHost?: string,
 ) {
-  return readBarcodes(imageFile, readerOptions);
+  return readBarcodes(imageFile, readerOptions, cdnHost);
 }
 
 /**
@@ -95,10 +114,17 @@ export async function readBarcodesFromImageFile(
 export async function readBarcodesFromImageData(
   imageData: ImageData,
   readerOptions?: ReaderOptions,
+  cdnHost?: string,
 ) {
-  return readBarcodes(imageData, readerOptions);
+  return readBarcodes(imageData, readerOptions, cdnHost);
 }
 
 export * from "../bindings/exposedReaderBindings.js";
-export { SCANX_CPP_COMMIT, SCANX_WASM_VERSION, type PrepareScanXModuleOptions, type ScanXModuleOverrides, type ScanXReaderModule } from "../share.js";
+export {
+  type PrepareScanXModuleOptions,
+  SCANX_CPP_COMMIT,
+  SCANX_WASM_VERSION,
+  type ScanXModuleOverrides,
+  type ScanXReaderModule,
+} from "../share.js";
 export const SCANX_WASM_SHA256 = READER_HASH;

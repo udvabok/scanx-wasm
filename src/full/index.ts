@@ -1,13 +1,14 @@
 import type { Merge } from "type-fest";
 import type { ReaderOptions, WriterOptions } from "../bindings/index.js";
 import {
+  type PrepareScanXModuleOptions,
   prepareScanXModuleWithFactory,
   purgeScanXModuleWithFactory,
   readBarcodesWithFactory,
-  writeBarcodeWithFactory,
-  type PrepareScanXModuleOptions,
+  readSingleBarcodeWithFactory,
   type ScanXFullModule,
   type ScanXModuleOverrides,
+  writeBarcodeWithFactory,
 } from "../share.js";
 import ScanXModuleFactory from "./scanx_full.js";
 
@@ -79,6 +80,12 @@ export async function readBarcodes(
 ) {
   return readBarcodesWithFactory(ScanXModuleFactory, input, readerOptions);
 }
+export async function readSingleBarcode(
+  input: Blob | ArrayBuffer | Uint8Array | ImageData,
+  readerOptions?: ReaderOptions,
+) {
+  return readSingleBarcodeWithFactory(ScanXModuleFactory, input, readerOptions);
+}
 
 /**
  * @deprecated Use {@link readBarcodes | `readBarcodes`} instead.
@@ -110,7 +117,10 @@ export async function writeBarcode(
 export * from "../bindings/exposedReaderBindings.js";
 export * from "../bindings/exposedWriterBindings.js";
 export {
-  SCANX_CPP_COMMIT, SCANX_WASM_VERSION, type PrepareScanXModuleOptions, type ScanXFullModule,
-  type ScanXModuleOverrides
+  type PrepareScanXModuleOptions,
+  SCANX_CPP_COMMIT,
+  SCANX_WASM_VERSION,
+  type ScanXFullModule,
+  type ScanXModuleOverrides,
 } from "../share.js";
 export const SCANX_WASM_SHA256 = FULL_HASH;
