@@ -44,7 +44,7 @@ Visit [this online demo](https://zxing-wasm-demo.deno.dev/) to quickly explore i
 ## Build
 
 ```bash
-git clone --recurse-submodules https://github.com/Sec-ant/zxing-wasm
+git clone --recurse-submodules https://github.com/udvabok/scanx-wasm.git
 cd zxing-wasm
 
 # Install pnpm before executing the next command:
