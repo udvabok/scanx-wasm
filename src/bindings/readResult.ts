@@ -2,12 +2,12 @@ import { decodeFormat, type ReadOutputBarcodeFormat } from "./barcodeFormat.js";
 import type { BarcodeSymbol } from "./barcodeSymbol.js";
 import { type ContentType, decodeContentType } from "./contentType.js";
 import type { EcLevel } from "./ecLevel.js";
-import type { Position, ZXingPosition } from "./position.js";
+import type { Position, ScanXPosition } from "./position.js";
 
 /**
  * @internal
  */
-export interface ZXingReadResult {
+export interface ScanXReadResult {
   /**
    * Whether the barcode is valid.
    */
@@ -50,7 +50,7 @@ export interface ZXingReadResult {
   /**
    * @internal
    */
-  position: ZXingPosition;
+  position: ScanXPosition;
   /**
    * Orientation of the barcode in degree.
    */
@@ -117,13 +117,15 @@ export interface ZXingReadResult {
    * @experimental The final form of this property is not yet settled and may change without a major version bump.
    */
   extra: string;
+  message: string;
+  status: number;
 }
 
 /**
  * Result of reading a barcode.
  */
 export interface ReadResult
-  extends Omit<ZXingReadResult, "format" | "contentType" | "position"> {
+  extends Omit<ScanXReadResult, "format" | "contentType" | "position"> {
   /**
    * Format of the barcode, should be one of {@link ReadOutputBarcodeFormat | `ReadOutputBarcodeFormat`}.
    *
@@ -150,18 +152,18 @@ export interface ReadResult
 }
 
 /**
- * Converts a ZXing read result to a standardized read result format.
+ * Converts a ScanX read result to a standardized read result format.
  *
- * @param zxingReadResult - The raw result from ZXing barcode reader
+ * @param ScanXReadResult - The raw result from ScanX barcode reader
  * @returns A normalized read result with decoded format and content type
  */
-export function zxingReadResultToReadResult(
-  zxingReadResult: ZXingReadResult,
+export function ScanXReadResultToReadResult(
+  ScanXReadResult: ScanXReadResult,
 ): ReadResult {
   return {
-    ...zxingReadResult,
-    format: decodeFormat(zxingReadResult.format),
-    contentType: decodeContentType(zxingReadResult.contentType),
-    eccLevel: zxingReadResult.ecLevel,
+    ...ScanXReadResult,
+    format: decodeFormat(ScanXReadResult.format),
+    contentType: decodeContentType(ScanXReadResult.contentType),
+    eccLevel: ScanXReadResult.ecLevel,
   };
 }

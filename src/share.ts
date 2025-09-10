@@ -3,97 +3,97 @@ import {
   defaultReaderOptions,
   defaultWriterOptions,
   type ReaderOptions,
+  readerOptionsToScanXReaderOptions,
   type ReadResult,
-  readerOptionsToZXingReaderOptions,
+  type ScanXReaderOptions,
+  type ScanXReadResult,
+  ScanXReadResultToReadResult,
+  type ScanXVector,
+  type ScanXWriteResult,
+  ScanXWriteResultToWriteResult,
+  type ScanXWriterOptions,
   type WriterOptions,
-  writerOptionsToZXingWriterOptions,
-  type ZXingReaderOptions,
-  type ZXingReadResult,
-  type ZXingVector,
-  type ZXingWriteResult,
-  type ZXingWriterOptions,
-  zxingReadResultToReadResult,
-  zxingWriteResultToWriteResult,
+  writerOptionsToScanXWriterOptions,
 } from "./bindings/index.js";
 
-export type ZXingModuleType = "reader" | "writer" | "full";
+export type ScanXModuleType = "reader" | "writer" | "full";
 
 /**
  * @internal
  */
-export interface ZXingReaderModule extends EmscriptenModule {
+export interface ScanXReaderModule extends EmscriptenModule {
   readBarcodesFromImage(
     bufferPtr: number,
     bufferLength: number,
-    zxingReaderOptions: ZXingReaderOptions,
-  ): ZXingVector<ZXingReadResult>;
+    ScanXReaderOptions: ScanXReaderOptions,
+  ): ScanXVector<ScanXReadResult>;
 
   readBarcodesFromPixmap(
     bufferPtr: number,
     imgWidth: number,
     imgHeight: number,
-    zxingReaderOptions: ZXingReaderOptions,
-  ): ZXingVector<ZXingReadResult>;
+    ScanXReaderOptions: ScanXReaderOptions,
+  ): ScanXVector<ScanXReadResult>;
 }
 
 /**
  * @internal
  */
-export interface ZXingWriterModule extends EmscriptenModule {
+export interface ScanXWriterModule extends EmscriptenModule {
   writeBarcodeFromText(
     text: string,
-    zxingWriterOptions: ZXingWriterOptions,
-  ): ZXingWriteResult;
+    ScanXWriterOptions: ScanXWriterOptions,
+  ): ScanXWriteResult;
 
   writeBarcodeFromBytes(
     bufferPtr: number,
     bufferLength: number,
-    zxingWriterOptions: ZXingWriterOptions,
-  ): ZXingWriteResult;
+    ScanXWriterOptions: ScanXWriterOptions,
+  ): ScanXWriteResult;
 }
 
 /**
  * @internal
  */
-export interface ZXingFullModule extends ZXingReaderModule, ZXingWriterModule {}
+export interface ScanXFullModule extends ScanXReaderModule, ScanXWriterModule {}
 
-export type ZXingReaderModuleFactory =
-  EmscriptenModuleFactory<ZXingReaderModule>;
+export type ScanXReaderModuleFactory =
+  EmscriptenModuleFactory<ScanXReaderModule>;
 
-export type ZXingWriterModuleFactory =
-  EmscriptenModuleFactory<ZXingWriterModule>;
+export type ScanXWriterModuleFactory =
+  EmscriptenModuleFactory<ScanXWriterModule>;
 
-export type ZXingFullModuleFactory = EmscriptenModuleFactory<ZXingFullModule>;
+export type ScanXFullModuleFactory = EmscriptenModuleFactory<ScanXFullModule>;
 
 interface TypeModuleMap {
-  reader: [ZXingReaderModule, ZXingReaderModuleFactory];
-  writer: [ZXingWriterModule, ZXingWriterModuleFactory];
-  full: [ZXingFullModule, ZXingFullModuleFactory];
+  reader: [ScanXReaderModule, ScanXReaderModuleFactory];
+  writer: [ScanXWriterModule, ScanXWriterModuleFactory];
+  full: [ScanXFullModule, ScanXFullModuleFactory];
 }
 
-export type ZXingModule<T extends ZXingModuleType = ZXingModuleType> =
+export type ScanXModule<T extends ScanXModuleType = ScanXModuleType> =
   TypeModuleMap[T][0];
 
-export type ZXingModuleFactory<T extends ZXingModuleType = ZXingModuleType> =
+export type ScanXModuleFactory<T extends ScanXModuleType = ScanXModuleType> =
   TypeModuleMap[T][1];
 
-export type ZXingModuleOverrides = Partial<EmscriptenModule>;
+export type ScanXModuleOverrides = Partial<EmscriptenModule>;
 
-export const ZXING_WASM_VERSION = NPM_PACKAGE_VERSION;
+export const SCANX_WASM_VERSION = NPM_PACKAGE_VERSION;
 
-export const ZXING_CPP_COMMIT = SUBMODULE_COMMIT;
+export const SCANX_CPP_COMMIT = SUBMODULE_COMMIT;
 
-const DEFAULT_MODULE_OVERRIDES: ZXingModuleOverrides =
+const DEFAULT_MODULE_OVERRIDES: ScanXModuleOverrides =
   import.meta.env.MODE === "miniprogram"
     ? {
         instantiateWasm() {
           throw Error(
-            `To use zxing-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
+            `To use scanx-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
 
-prepareZXingModule({
+prepareScanXModule({
   overrides: {
     instantiateWasm(imports, successCallback) {
-      WXWebAssembly.instantiate("path/to/zxing_full.wasm", imports).then(({ instance }) =>
+      WXWebAssembly.instantiate("path/to/scanx_full.wasm", imports).then(({ instance }) =>
         successCallback(instance),
       );
       return {};
@@ -104,7 +104,7 @@ prepareZXingModule({
 Learn more:
 - https://developers.weixin.qq.com/miniprogram/dev/framework/performance/wasm.html
 - https://emscripten.org/docs/api_reference/module.html#Module.instantiateWasm
-- https://github.com/Sec-ant/zxing-wasm#integrating-in-non-web-runtimes
+- https://github.com/Sec-ant/scanx-wasm#integrating-in-non-web-runtimes
 `,
           );
         },
@@ -114,7 +114,7 @@ Learn more:
           locateFile: (path, prefix) => {
             const match = path.match(/_(.+?)\.wasm$/);
             if (match) {
-              return `https://fastly.jsdelivr.net/npm/zxing-wasm@${NPM_PACKAGE_VERSION}/dist/${match[1]}/${path}`;
+              return `https://fastly.jsdelivr.net/npm/scanx-wasm@${NPM_PACKAGE_VERSION}/dist/${match[1]}/${path}`;
             }
             return prefix + path;
           },
@@ -129,26 +129,26 @@ Learn more:
           },
         };
 
-type CachedValue<T extends ZXingModuleType = ZXingModuleType> =
-  | [ZXingModuleOverrides]
-  | [ZXingModuleOverrides, Promise<ZXingModule<T>>];
+type CachedValue<T extends ScanXModuleType = ScanXModuleType> =
+  | [ScanXModuleOverrides]
+  | [ScanXModuleOverrides, Promise<ScanXModule<T>>];
 
-const __CACHE__ = new WeakMap<ZXingModuleFactory, CachedValue>();
+const __CACHE__ = new WeakMap<ScanXModuleFactory, CachedValue>();
 
-export interface PrepareZXingModuleOptions {
+export interface PrepareScanXModuleOptions {
   /**
    * The Emscripten module overrides to be passed to the factory function.
    * The `locateFile` function is overridden by default to load the WASM file from the jsDelivr CDN.
    */
-  overrides?: ZXingModuleOverrides;
+  overrides?: ScanXModuleOverrides;
   /**
    * A function to compare the cached overrides with the input overrides.
    * So that the module promise can be reused if the overrides are the same.
    * Defaults to a shallow equality function.
    */
   equalityFn?: (
-    cachedOverrides: ZXingModuleOverrides,
-    overrides: ZXingModuleOverrides,
+    cachedOverrides: ScanXModuleOverrides,
+    overrides: ScanXModuleOverrides,
   ) => boolean;
   /**
    * Whether to instantiate the module immediately.
@@ -195,45 +195,45 @@ export function shallow<T extends Record<string, unknown>>(a: T, b: T) {
   );
 }
 
-export function prepareZXingModuleWithFactory<T extends ZXingModuleType>(
-  zxingModuleFactory: ZXingModuleFactory<T>,
-  options?: Merge<PrepareZXingModuleOptions, { fireImmediately?: false }>,
+export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
+  options?: Merge<PrepareScanXModuleOptions, { fireImmediately?: false }>,
 ): void;
 
-export function prepareZXingModuleWithFactory<T extends ZXingModuleType>(
-  zxingModuleFactory: ZXingModuleFactory<T>,
-  options: Merge<PrepareZXingModuleOptions, { fireImmediately: true }>,
-): Promise<ZXingModule<T>>;
+export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
+  options: Merge<PrepareScanXModuleOptions, { fireImmediately: true }>,
+): Promise<ScanXModule<T>>;
 
-export function prepareZXingModuleWithFactory<T extends ZXingModuleType>(
-  zxingModuleFactory: ZXingModuleFactory<T>,
-  options?: PrepareZXingModuleOptions,
-): void | Promise<ZXingModule<T>>;
+export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
+  options?: PrepareScanXModuleOptions,
+): void | Promise<ScanXModule<T>>;
 
 /**
- * Prepares and caches a ZXing module instance with the specified factory and options.
+ * Prepares and caches a ScanX module instance with the specified factory and options.
  *
- * @param zxingModuleFactory - Factory function to create the ZXing module
+ * @param ScanXModuleFactory - Factory function to create the ScanX module
  * @param options - Configuration options for module preparation
  * @param options.overrides - Custom overrides for module initialization
  * @param options.equalityFn - Function to compare override equality (defaults to shallow comparison)
  * @param options.fireImmediately - Whether to instantiate the module immediately (defaults to false)
- * @returns Promise of the ZXing module instance if fireImmediately is true, otherwise void
+ * @returns Promise of the ScanX module instance if fireImmediately is true, otherwise void
  *
  * @remarks
- * This function implements a caching mechanism for ZXing module instances. It stores
+ * This function implements a caching mechanism for ScanX module instances. It stores
  * both the module overrides and the instantiated module promise in a global cache.
  */
-export function prepareZXingModuleWithFactory<T extends ZXingModuleType>(
-  zxingModuleFactory: ZXingModuleFactory<T>,
+export function prepareScanXModuleWithFactory<T extends ScanXModuleType>(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
   {
     overrides,
     equalityFn = shallow,
     fireImmediately = false,
-  }: PrepareZXingModuleOptions = {},
+  }: PrepareScanXModuleOptions = {},
 ) {
   // look up the cached overrides and module promise
-  const [cachedOverrides, cachedPromise] = (__CACHE__.get(zxingModuleFactory) as
+  const [cachedOverrides, cachedPromise] = (__CACHE__.get(ScanXModuleFactory) as
     | CachedValue<T>
     | undefined) ?? [DEFAULT_MODULE_OVERRIDES];
 
@@ -253,49 +253,49 @@ export function prepareZXingModuleWithFactory<T extends ZXingModuleType>(
       return cachedPromise;
     }
     // otherwise, instantiate the module
-    const modulePromise = zxingModuleFactory({
+    const modulePromise = ScanXModuleFactory({
       ...resolvedOverrides,
-    }) as Promise<ZXingModule<T>>;
+    }) as Promise<ScanXModule<T>>;
     // cache the overrides and the promise
-    __CACHE__.set(zxingModuleFactory, [resolvedOverrides, modulePromise]);
+    __CACHE__.set(ScanXModuleFactory, [resolvedOverrides, modulePromise]);
     // and return the promise
     return modulePromise;
   }
 
   // otherwise only update the cache if the overrides have changed
   if (!(cacheHit ?? equalityFn(cachedOverrides, resolvedOverrides))) {
-    __CACHE__.set(zxingModuleFactory, [resolvedOverrides]);
+    __CACHE__.set(ScanXModuleFactory, [resolvedOverrides]);
   }
 }
 
 /**
- * Removes a ZXing module instance from the internal cache.
+ * Removes a ScanX module instance from the internal cache.
  *
- * @param zxingModuleFactory - The factory function used to create the ZXing module instance
+ * @param ScanXModuleFactory - The factory function used to create the ScanX module instance
  *
  * @remarks
- * This function is used to clean up cached ZXing module instances when they are no longer needed.
+ * This function is used to clean up cached ScanX module instances when they are no longer needed.
  */
-export function purgeZXingModuleWithFactory<T extends ZXingModuleType>(
-  zxingModuleFactory: ZXingModuleFactory<T>,
+export function purgeScanXModuleWithFactory<T extends ScanXModuleType>(
+  ScanXModuleFactory: ScanXModuleFactory<T>,
 ) {
-  __CACHE__.delete(zxingModuleFactory);
+  __CACHE__.delete(ScanXModuleFactory);
 }
 
 /**
- * Reads barcodes from an image using a ZXing module factory.
+ * Reads barcodes from an image using a ScanX module factory.
  *
- * @param zxingModuleFactory - Factory function to create a ZXing module instance
+ * @param ScanXModuleFactory - Factory function to create a ScanX module instance
  * @param input - Source image data as a Blob, ArrayBuffer, Uint8Array, or ImageData
  * @param readerOptions - Optional configuration options for barcode reading (defaults to defaultReaderOptions)
  * @returns An array of ReadResult objects containing decoded barcode information
  *
  * @remarks
- * The function manages memory allocation and deallocation for the ZXing module
+ * The function manages memory allocation and deallocation for the ScanX module
  * and properly cleans up resources after processing.
  */
 export async function readBarcodesWithFactory<T extends "reader" | "full">(
-  zxingModuleFactory: ZXingModuleFactory<T>,
+  ScanXModuleFactory: ScanXModuleFactory<T>,
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions: ReaderOptions = defaultReaderOptions,
 ) {
@@ -303,10 +303,10 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
     ...defaultReaderOptions,
     ...readerOptions,
   };
-  const zxingModule = await prepareZXingModuleWithFactory(zxingModuleFactory, {
+  const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
     fireImmediately: true,
   });
-  let zxingReadResultVector: ZXingVector<ZXingReadResult>;
+  let ScanXReadResultVector: ScanXVector<ScanXReadResult>;
   let bufferPtr: number;
 
   if ("width" in input && "height" in input && "data" in input) {
@@ -317,13 +317,13 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
       width,
       height,
     } = input;
-    bufferPtr = zxingModule._malloc(size);
-    zxingModule.HEAPU8.set(buffer, bufferPtr);
-    zxingReadResultVector = zxingModule.readBarcodesFromPixmap(
+    bufferPtr = ScanXModule._malloc(size);
+    ScanXModule.HEAPU8.set(buffer, bufferPtr);
+    ScanXReadResultVector = ScanXModule.readBarcodesFromPixmap(
       bufferPtr,
       width,
       height,
-      readerOptionsToZXingReaderOptions(requiredReaderOptions),
+      readerOptionsToScanXReaderOptions(requiredReaderOptions),
     );
   } else {
     let size: number;
@@ -340,38 +340,38 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
     } else {
       throw new TypeError("Invalid input type");
     }
-    bufferPtr = zxingModule._malloc(size);
-    zxingModule.HEAPU8.set(buffer, bufferPtr);
-    zxingReadResultVector = zxingModule.readBarcodesFromImage(
+    bufferPtr = ScanXModule._malloc(size);
+    ScanXModule.HEAPU8.set(buffer, bufferPtr);
+    ScanXReadResultVector = ScanXModule.readBarcodesFromImage(
       bufferPtr,
       size,
-      readerOptionsToZXingReaderOptions(requiredReaderOptions),
+      readerOptionsToScanXReaderOptions(requiredReaderOptions),
     );
   }
-  zxingModule._free(bufferPtr);
+  ScanXModule._free(bufferPtr);
   const readResults: ReadResult[] = [];
-  for (let i = 0; i < zxingReadResultVector.size(); ++i) {
+  for (let i = 0; i < ScanXReadResultVector.size(); ++i) {
     readResults.push(
-      zxingReadResultToReadResult(zxingReadResultVector.get(i)!),
+      ScanXReadResultToReadResult(ScanXReadResultVector.get(i)!),
     );
   }
   return readResults;
 }
 
 /**
- * Generates a barcode image using a ZXing module factory with support for text and binary input.
+ * Generates a barcode image using a ScanX module factory with support for text and binary input.
  *
- * @param zxingModuleFactory - The factory function that creates a ZXing module instance
+ * @param ScanXModuleFactory - The factory function that creates a ScanX module instance
  * @param input - The data to encode in the barcode, either as a string or Uint8Array
  * @param writerOptions - Optional configuration options for barcode generation
  * @returns A promise that resolves to the barcode write result
  *
  * @remarks
  * The function handles memory management automatically when processing binary input,
- * ensuring proper allocation and deallocation of memory in the ZXing module.
+ * ensuring proper allocation and deallocation of memory in the ScanX module.
  */
 export async function writeBarcodeWithFactory<T extends "writer" | "full">(
-  zxingModuleFactory: ZXingModuleFactory<T>,
+  ScanXModuleFactory: ScanXModuleFactory<T>,
   input: string | Uint8Array,
   writerOptions: WriterOptions = defaultWriterOptions,
 ) {
@@ -379,27 +379,27 @@ export async function writeBarcodeWithFactory<T extends "writer" | "full">(
     ...defaultWriterOptions,
     ...writerOptions,
   };
-  const zxingWriterOptions = writerOptionsToZXingWriterOptions(
+  const ScanXWriterOptions = writerOptionsToScanXWriterOptions(
     requiredWriterOptions,
   );
-  const zxingModule = await prepareZXingModuleWithFactory(zxingModuleFactory, {
+  const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
     fireImmediately: true,
   });
   if (typeof input === "string") {
-    return zxingWriteResultToWriteResult(
-      zxingModule.writeBarcodeFromText(input, zxingWriterOptions),
+    return ScanXWriteResultToWriteResult(
+      ScanXModule.writeBarcodeFromText(input, ScanXWriterOptions),
     );
   }
   const { byteLength } = input;
-  const bufferPtr = zxingModule._malloc(byteLength);
-  zxingModule.HEAPU8.set(input, bufferPtr);
-  const zxingWriteResult = zxingModule.writeBarcodeFromBytes(
+  const bufferPtr = ScanXModule._malloc(byteLength);
+  ScanXModule.HEAPU8.set(input, bufferPtr);
+  const ScanXWriteResult = ScanXModule.writeBarcodeFromBytes(
     bufferPtr,
     byteLength,
-    zxingWriterOptions,
+    ScanXWriterOptions,
   );
-  zxingModule._free(bufferPtr);
-  return zxingWriteResultToWriteResult(zxingWriteResult);
+  ScanXModule._free(bufferPtr);
+  return ScanXWriteResultToWriteResult(ScanXWriteResult);
 }
 
 if (import.meta.env.MODE === "miniprogram") {

@@ -28,10 +28,12 @@ dist-ssr
 docs
 build
 coverage
-src/**/zxing_*.wasm
-src/**/zxing_*.js
+src/**/scanx_*.wasm
+src/**/scanx_*.js
 
 .emsdk-cache
 *.tgz
 *.tar.gz
 *.tsbuildinfo
+
+/zxing-cpp

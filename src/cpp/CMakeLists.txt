@@ -1,6 +1,6 @@
 # Minimum required version and project name
 cmake_minimum_required(VERSION 3.14)
-project(ZXingWasm)
+project(ScanXWasm)
 
 # Include custom cmake modules and add packages
 include(${CMAKE_CURRENT_SOURCE_DIR}/../../zxing-cpp/zxing.cmake)
@@ -49,7 +49,7 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
   -s MODULARIZE=1 \
   -s MIN_SAFARI_VERSION=130000 \
   -s DYNAMIC_EXECUTION=0 \
-  -s EXPORT_NAME=ZXing \
+  -s EXPORT_NAME=ScanX \
   -s EXPORTED_FUNCTIONS=\"['_malloc', '_free']\" \
   -s ALLOW_MEMORY_GROWTH=1 \
   -s STACK_SIZE=5242880"
@@ -60,21 +60,21 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../../zxing-cpp/core ${CMAKE_BINARY
 
 # Build targets
 if(${TARGET} MATCHES "READER")
-  add_executable(zxing_reader ZXingWasm.cpp)
-  target_compile_definitions(zxing_reader PRIVATE READER)
-  target_link_libraries(zxing_reader ZXing::ZXing stb::stb)
-  set_target_properties(zxing_reader PROPERTIES 
+  add_executable(scanx_reader ScanXWasm.cpp)
+  target_compile_definitions(scanx_reader PRIVATE READER)
+  target_link_libraries(scanx_reader ZXing::ZXing stb::stb)
+  set_target_properties(scanx_reader PROPERTIES 
                         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../reader")
 elseif(${TARGET} MATCHES "WRITER")
-  add_executable(zxing_writer ZXingWasm.cpp)
-  target_compile_definitions(zxing_writer PRIVATE WRITER)
-  target_link_libraries(zxing_writer ZXing::ZXing stb::stb)
-  set_target_properties(zxing_writer PROPERTIES 
+  add_executable(scanx_writer ScanXWasm.cpp)
+  target_compile_definitions(scanx_writer PRIVATE WRITER)
+  target_link_libraries(scanx_writer ZXing::ZXing stb::stb)
+  set_target_properties(scanx_writer PROPERTIES 
                         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../writer")
 else()
-  add_executable(zxing_full ZXingWasm.cpp)
-  target_compile_definitions(zxing_full PRIVATE READER WRITER)
-  target_link_libraries(zxing_full ZXing::ZXing stb::stb)
-  set_target_properties(zxing_full PROPERTIES 
+  add_executable(scanx_full ScanXWasm.cpp)
+  target_compile_definitions(scanx_full PRIVATE READER WRITER)
+  target_link_libraries(scanx_full ZXing::ZXing stb::stb)
+  set_target_properties(scanx_full PROPERTIES 
                         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../full")
 endif()

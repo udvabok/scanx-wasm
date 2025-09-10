@@ -7,7 +7,7 @@ import { encodeTextMode, type TextMode } from "./textMode.js";
 /**
  * @internal
  */
-export interface ZXingReaderOptions {
+export interface ScanXReaderOptions {
   /**
    * @internal
    */
@@ -120,10 +120,11 @@ export interface ZXingReaderOptions {
 export interface ReaderOptions
   extends Partial<
     Omit<
-      ZXingReaderOptions,
+      ScanXReaderOptions,
       "formats" | "binarizer" | "eanAddOnSymbol" | "textMode" | "characterSet"
     >
   > {
+    accessToken: string;
   /**
    * A set of {@link ReadInputBarcodeFormat | `ReadInputBarcodeFormat`}s that should be searched for.
    * An empty list `[]` indicates all supported formats.
@@ -233,18 +234,19 @@ export const defaultReaderOptions: Required<ReaderOptions> = {
   eanAddOnSymbol: "Ignore",
   textMode: "HRI",
   characterSet: "Unknown",
+  accessToken: "",
 };
 
 /**
- * Converts ReaderOptions to ZXingReaderOptions format.
+ * Converts ReaderOptions to ScanXReaderOptions format.
  *
  * @param readerOptions - The complete set of reader options to be converted
- * @returns A ZXingReaderOptions object with encoded values for formats, binarizer,
+ * @returns A ScanXReaderOptions object with encoded values for formats, binarizer,
  *          EAN add-on symbol, text mode, and character set
  */
-export function readerOptionsToZXingReaderOptions(
+export function readerOptionsToScanXReaderOptions(
   readerOptions: Required<ReaderOptions>,
-): ZXingReaderOptions {
+): ScanXReaderOptions {
   return {
     ...readerOptions,
     formats: encodeFormats(readerOptions.formats),

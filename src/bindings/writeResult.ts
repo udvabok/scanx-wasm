@@ -3,7 +3,7 @@ import type { BarcodeSymbol } from "./barcodeSymbol.js";
 /**
  * @internal
  */
-export interface ZXingWriteResult {
+export interface ScanXWriteResult {
   /**
    * The encoded barcode as a scalable vector graphics (SVG) string.
    */
@@ -34,7 +34,7 @@ export interface ZXingWriteResult {
  *
  * @experimental The final form of this API is not yet settled and may change.
  */
-export interface WriteResult extends Omit<ZXingWriteResult, "image"> {
+export interface WriteResult extends Omit<ScanXWriteResult, "image"> {
   /**
    * The encoded barcode as an image blob.
    * If some error happens, this will be `null`.
@@ -45,9 +45,9 @@ export interface WriteResult extends Omit<ZXingWriteResult, "image"> {
 }
 
 /**
- * Converts a ZXing write result to a standard write result format, handling image data conversion.
+ * Converts a ScanX write result to a standard write result format, handling image data conversion.
  *
- * @param zxingWriteResult - The ZXing write result object to convert
+ * @param ScanXWriteResult - The ScanX write result object to convert
  * @returns A new write result object with the image converted to a Blob if present
  *
  * @remarks
@@ -55,14 +55,14 @@ export interface WriteResult extends Omit<ZXingWriteResult, "image"> {
  * but converts the image data from a Uint8Array to a PNG Blob when present.
  * If no image data exists, the image property will be null.
  */
-export function zxingWriteResultToWriteResult(
-  zxingWriteResult: ZXingWriteResult,
+export function ScanXWriteResultToWriteResult(
+  ScanXWriteResult: ScanXWriteResult,
 ) {
   return {
-    ...zxingWriteResult,
+    ...ScanXWriteResult,
     image:
-      (zxingWriteResult.image &&
-        new Blob([new Uint8Array(zxingWriteResult.image)], {
+      (ScanXWriteResult.image &&
+        new Blob([new Uint8Array(ScanXWriteResult.image)], {
           type: "image/png",
         })) ??
       null,

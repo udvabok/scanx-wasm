@@ -10,9 +10,9 @@ import {
   test,
 } from "vitest";
 import {
-  prepareZXingModule,
-  type ReaderOptions,
+  prepareScanXModule,
   readBarcodes,
+  type ReaderOptions,
 } from "../src/reader/index.js";
 import { testEntries } from "./testEntries.js";
 import {
@@ -72,11 +72,11 @@ test("consistent test entries", async () => {
   expect(testDirs).toEqual(testEntries.map(({ directory }) => directory));
 });
 
-await prepareZXingModule({
+await prepareScanXModule({
   overrides: {
     wasmBinary: (
       await readFile(
-        resolve(import.meta.dirname, "../src/reader/zxing_reader.wasm"),
+        resolve(import.meta.dirname, "../src/reader/scanx_reader.wasm"),
       )
     ).buffer as ArrayBuffer,
   },

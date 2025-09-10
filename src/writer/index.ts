@@ -1,6 +1,6 @@
 /**
  * The writer part API of this package is subject to change a lot.
- * Please track the status of [this issue](https://github.com/zxing-cpp/zxing-cpp/issues/332).
+ * Please track the status of [this issue](https://github.com/scanx-cpp/scanx-cpp/issues/332).
  *
  * @packageDocumentation
  */
@@ -8,72 +8,72 @@
 import type { Merge } from "type-fest";
 import type { WriterOptions } from "../bindings/index.js";
 import {
-  type PrepareZXingModuleOptions,
-  prepareZXingModuleWithFactory,
-  purgeZXingModuleWithFactory,
+  type PrepareScanXModuleOptions,
+  prepareScanXModuleWithFactory,
+  purgeScanXModuleWithFactory,
+  type ScanXModuleOverrides,
+  type ScanXWriterModule,
   writeBarcodeWithFactory,
-  type ZXingModuleOverrides,
-  type ZXingWriterModule,
 } from "../share.js";
-import zxingModuleFactory from "./zxing_writer.js";
+import ScanXModuleFactory from "./scanx_writer.js";
 
-export function prepareZXingModule(
-  options?: Merge<PrepareZXingModuleOptions, { fireImmediately?: false }>,
+export function prepareScanXModule(
+  options?: Merge<PrepareScanXModuleOptions, { fireImmediately?: false }>,
 ): void;
 
-export function prepareZXingModule(
-  options: Merge<PrepareZXingModuleOptions, { fireImmediately: true }>,
-): Promise<ZXingWriterModule>;
+export function prepareScanXModule(
+  options: Merge<PrepareScanXModuleOptions, { fireImmediately: true }>,
+): Promise<ScanXWriterModule>;
 
-export function prepareZXingModule(
-  options?: PrepareZXingModuleOptions,
-): void | Promise<ZXingWriterModule>;
+export function prepareScanXModule(
+  options?: PrepareScanXModuleOptions,
+): void | Promise<ScanXWriterModule>;
 
-export function prepareZXingModule(options?: PrepareZXingModuleOptions) {
-  return prepareZXingModuleWithFactory(zxingModuleFactory, options);
+export function prepareScanXModule(options?: PrepareScanXModuleOptions) {
+  return prepareScanXModuleWithFactory(ScanXModuleFactory, options);
 }
 
-export function purgeZXingModule() {
-  return purgeZXingModuleWithFactory(zxingModuleFactory);
+export function purgeScanXModule() {
+  return purgeScanXModuleWithFactory(ScanXModuleFactory);
 }
 
 /**
- * @deprecated Use {@link prepareZXingModule | `prepareZXingModule`} instead.
+ * @deprecated Use {@link prepareScanXModule | `prepareScanXModule`} instead.
  * This function is equivalent to the following:
  *
  * ```ts
- * prepareZXingModule({
- *   overrides: zxingModuleOverrides,
+ * prepareScanXModule({
+ *   overrides: ScanXModuleOverrides,
  *   equalityFn: Object.is,
  *   fireImmediately: true,
  * });
  * ```
  */
-export function getZXingModule(zxingModuleOverrides?: ZXingModuleOverrides) {
-  return prepareZXingModule({
-    overrides: zxingModuleOverrides,
+export function getScanXModule(ScanXModuleOverrides?: ScanXModuleOverrides) {
+  return prepareScanXModule({
+    overrides: ScanXModuleOverrides,
     equalityFn: Object.is,
     fireImmediately: true,
   });
 }
 
 /**
- * @deprecated Use {@link prepareZXingModule | `prepareZXingModule`} instead.
+ * @deprecated Use {@link prepareScanXModule | `prepareScanXModule`} instead.
  * This function is equivalent to the following:
  *
  * ```ts
- * prepareZXingModule({
- *   overrides: zxingModuleOverrides,
+ * prepareScanXModule({
+ *   overrides: ScanXModuleOverrides,
  *   equalityFn: Object.is,
  *   fireImmediately: false,
  * });
  * ```
  */
-export function setZXingModuleOverrides(
-  zxingModuleOverrides: ZXingModuleOverrides,
+export function setScanXModuleOverrides(
+  ScanXModuleOverrides: ScanXModuleOverrides,
 ) {
-  prepareZXingModule({
-    overrides: zxingModuleOverrides,
+  prepareScanXModule({
+    overrides: ScanXModuleOverrides,
     equalityFn: Object.is,
     fireImmediately: false,
   });
@@ -83,15 +83,9 @@ export async function writeBarcode(
   input: string | Uint8Array,
   writerOptions?: WriterOptions,
 ) {
-  return writeBarcodeWithFactory(zxingModuleFactory, input, writerOptions);
+  return writeBarcodeWithFactory(ScanXModuleFactory, input, writerOptions);
 }
 
 export * from "../bindings/exposedWriterBindings.js";
-export {
-  type PrepareZXingModuleOptions,
-  ZXING_CPP_COMMIT,
-  ZXING_WASM_VERSION,
-  type ZXingModuleOverrides,
-  type ZXingWriterModule,
-} from "../share.js";
-export const ZXING_WASM_SHA256 = WRITER_HASH;
+export { SCANX_CPP_COMMIT, SCANX_WASM_VERSION, type PrepareScanXModuleOptions, type ScanXModuleOverrides, type ScanXWriterModule } from "../share.js";
+export const SCANX_WASM_SHA256 = WRITER_HASH;

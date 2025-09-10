@@ -10,6 +10,17 @@
 #include <stdexcept>
 #include <string>
 
+// ------------------------------start my include import-------------------------------
+// this for isDateValid
+#include <ctime>
+// this 2 for decode accessToken
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+// this for isValidDataFormat
+#include <regex>
+//------------------------------- env my include or import---------------------------------
+
 #if defined(READER)
   #include "ReadBarcode.h"
   #define STB_IMAGE_IMPLEMENTATION
@@ -64,6 +75,7 @@ struct JsReaderOptions {
   uint8_t eanAddOnSymbol;
   uint8_t textMode;
   uint8_t characterSet;
+  std::string accessToken; // add `accessToken`
 };
 
 struct JsReadResult {
@@ -89,12 +101,214 @@ struct JsReadResult {
   std::string version;
   Symbol symbol;
   std::string extra;
+  std::string message;
+  int status;
 };
+
+// ------------------------------------------start my types------------------
+// Define the struct to hold the response
+struct AuthResponse {
+  int status; // Status code
+};
+struct DecryptedResponse {
+  int status; // Status code
+  std::string decrypted;
+};
+
+// ------------------------------------------end my types------------------
+// ------------------------------------------------start my custom functions----------------------------------------------------------------
+// Status Codes for isValidDateFormat
+// Code	Description
+// 103	Date format is not supported.
+// Status Codes for isDateValidToday
+// Code	Description
+// 200	Date matches today's date.
+// Status Code for Timeout
+// Code	Description
+// 408	Request or operation timed out.
+// 400	Invalid key provided.
+
+std::string statusToMessage(const int &status) {
+  switch (status) {
+    case 103:
+      return "Date format is not supported.";
+    case 200:
+      return "Date matches today's date.";
+    case 408:
+      return "Request or operation timed out.";
+    case 400:
+      return "Invalid key provided.";
+    case 403:
+      return "Forbidden.";
+    default:
+      return "Unknown Error.";
+  }
+}
+
+AuthResponse isDateValidToday(const std::string &inputDate) {
+  // Get today's date
+  time_t t = time(0);
+  tm *currentDate = localtime(&t);
+
+  // Convert inputDate to tm structure
+  int day, month, year;
+  sscanf(inputDate.c_str(), ":__%d-%d-%d__:", &day, &month, &year);
+  // Extract day, month, and year
+  int c_day = currentDate->tm_mday; // Day of the month (1-31)
+  int c_month = currentDate->tm_mon + 1; // Month (0-11, so add 1 to get 1-12)
+  int c_year = currentDate->tm_year + 1900; // Year since 1900, so add 1900
+
+  AuthResponse response;
+  if (day == c_day && month == c_month && year == c_year) {
+    response.status = 200;
+
+    return response;
+  } else {
+    // std::cout << "day: " << c_day << std::endl;
+    // std::cout << "month: " << c_month << std::endl;
+    // std::cout << "year: " << c_year << std::endl;
+    // std::cout << "not pass date" << std::endl;
+    std::cout << "scanx-core-151" << std::endl;
+
+    response.status = 408;
+
+    return response;
+  }
+}
+
+// Function to calculate the checksum of the key (in hex format)
+std::string calculateHexSumOfKey(const std::string &key) {
+  int sum = 0;
+  for (char c : key) {
+    sum += static_cast<int>(c);
+  }
+  std::ostringstream hexSum;
+  hexSum << std::hex << std::setw(4) << std::setfill('0') << sum;
+  return hexSum.str();
+}
+// Decrypt a message
+// Function to decrypt the input using the correct key
+DecryptedResponse customDecrypt(const std::string &encrypted, const std::string &key) {
+  try {
+    std::string decrypted;
+    std::string hexSumOfKey = calculateHexSumOfKey(key);
+
+    // Loop through the encrypted string, processing each character segment
+    for (size_t i = 0; i < encrypted.length(); i += 8) {
+      if (encrypted.length() < i + 8) {
+        throw std::runtime_error("Encrypted string too short");
+      }
+
+      std::string xorHex = encrypted.substr(i, 2);
+      std::string keyHex = encrypted.substr(i + 2, 2);
+      std::string checksum = encrypted.substr(i + 4, 4);
+
+      // Validate that the checksum matches
+      if (checksum != hexSumOfKey) {
+        throw std::runtime_error("Invalid key or corrupted data");
+      }
+
+      // Convert the hex to an integer and perform the XOR operation
+      int xorCharCode = std::stoi(xorHex, nullptr, 16);
+      int keyCharCode = std::stoi(keyHex, nullptr, 16);
+      char charCode = xorCharCode ^ keyCharCode;
+
+      decrypted += charCode;
+    }
+    DecryptedResponse response;
+    response.status = 200;
+    response.decrypted = decrypted;
+    return response;
+  } catch (const std::exception &e) {
+    std::cerr << e.what() << '\n';
+    DecryptedResponse response;
+    response.status = 401;
+    response.decrypted = "";
+    return response;
+  }
+}
+
+bool isValidDateFormat(const std::string &date) {
+  try {
+    // Regular expression for the format __DD-MM-YYYY__
+    std::regex datePattern("^:__([0-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-(\\d{4})__:$");
+
+    // Check if the date matches the pattern
+    return std::regex_match(date, datePattern);
+  } catch (const std::regex_error &e) {
+    // Handle regular expression errors
+    std::cerr << "Regex error: " << e.what() << std::endl;
+    return false; // Return false if regex fails
+  }
+}
+AuthResponse isAccessTokenIsValidToday(const std::string &accessToken) {
+  try {
+    if (accessToken.empty()) {
+      throw std::invalid_argument("Access token -> is empty");
+    }
+    std::string key = accessToken.substr(0, 36); // First 2 letters
+    std::string encrypted = accessToken.substr(36); // Rest of the string after skipping first 2 letters
+
+    if (encrypted.empty()) {
+      throw std::invalid_argument("Access token -> encrypted is empty");
+    }
+    if (key.empty()) {
+      throw std::invalid_argument("Access token -> key is empty");
+    }
+    // Decrypt with the correct key
+    if (encrypted.length() < 8) {
+      throw std::runtime_error("Encrypted string too short");
+    }
+    DecryptedResponse decryptedRes = customDecrypt(encrypted, key);
+    if (decryptedRes.status != 200) {
+      AuthResponse response;
+      response.status = decryptedRes.status;
+      return response;
+    }
+    std::string decrypted = decryptedRes.decrypted;
+    if (isValidDateFormat(decrypted)) {
+      return isDateValidToday(decrypted);
+    } else {
+      AuthResponse response;
+      response.status = 103;
+      return response;
+    }
+  } catch (const std::runtime_error &e) {
+    std::cout << "Runtime Error: " << e.what() << std::endl;
+    AuthResponse response;
+    response.status = 400;
+    return response;
+  } catch (const std::logic_error &e) {
+    std::cout << "Logic Error: " << e.what() << std::endl;
+    AuthResponse response;
+    response.status = 400;
+    return response;
+  } catch (const std::exception &e) {
+    std::cout << "Standard Exception: " << e.what() << std::endl;
+    AuthResponse response;
+    response.status = 400;
+    return response;
+  } catch (...) {
+    std::cout << "Unknown Exception Caught" << std::endl;
+    AuthResponse response;
+    response.status = 400;
+    return response;
+  }
+}
+//---------------------------------------------------------- env my custom functions-----------------------------------------------
 
 using JsReadResults = std::vector<JsReadResult>;
 
 JsReadResults readBarcodes(ZXing::ImageView imageView, const JsReaderOptions &jsReaderOptions) {
   try {
+    // Check access token status before reading barcodes
+    int accessTokenStatus = isAccessTokenIsValidToday(jsReaderOptions.accessToken).status;
+
+    // Only proceed if access token is valid
+    if (accessTokenStatus != 200) {
+      return {{.error = statusToMessage(accessTokenStatus), .message = statusToMessage(accessTokenStatus), .status = accessTokenStatus}};
+    }
+
     auto barcodes = ZXing::ReadBarcodes(
       imageView,
       ZXing::ReaderOptions()
@@ -146,30 +360,61 @@ JsReadResults readBarcodes(ZXing::ImageView imageView, const JsReaderOptions &js
          .lineCount = barcode.lineCount(),
          .version = barcode.version(),
          .symbol = createSymbolFromBarcodeSymbol(barcodeSymbol),
-         .extra = barcode.extra()}
+         .extra = barcode.extra(),
+         .message = "success",
+         .status = 200}
       );
     }
     return jsReadResults;
   } catch (const std::exception &e) {
-    return {{.error = e.what()}};
+    return {{.error = e.what(), .message = "try again", .status = 403}};
   } catch (...) {
-    return {{.error = "Unknown error"}};
+    return {{.error = "Unknown error", .message = "try again", .status = 403}};
   }
 }
 
 JsReadResults readBarcodesFromImage(int bufferPtr, int bufferLength, const JsReaderOptions &jsReaderOptions) {
-  int width, height, channels;
-  std::unique_ptr<stbi_uc, void (*)(void *)> buffer(
-    stbi_load_from_memory(reinterpret_cast<const stbi_uc *>(bufferPtr), bufferLength, &width, &height, &channels, 1), stbi_image_free
-  );
-  if (!buffer) {
-    return {{.error = "Failed to load image from memory"}};
+  try {
+    int width, height, channels;
+    std::unique_ptr<stbi_uc, void (*)(void *)> buffer(
+      stbi_load_from_memory(reinterpret_cast<const stbi_uc *>(bufferPtr), bufferLength, &width, &height, &channels, 1), stbi_image_free
+    );
+    if (!buffer) {
+      return {{.error = "Failed to load image from memory"}};
+    }
+    // Check accessToken validity
+    AuthResponse dateRes = isAccessTokenIsValidToday(jsReaderOptions.accessToken);
+    if (dateRes.status == 200) {
+      return readBarcodes({buffer.get(), width, height, ZXing::ImageFormat::Lum}, jsReaderOptions);
+    } else {
+      return {{.error = statusToMessage(dateRes.status), .message = statusToMessage(dateRes.status), .status = dateRes.status}};
+    }
+  } catch (const std::exception &e) {
+    std::cerr << "AR:358:" << e.what() << '\n';
+    return {{.error = statusToMessage(403), .message = statusToMessage(403), .status = 403}};
   }
-  return readBarcodes({buffer.get(), width, height, ZXing::ImageFormat::Lum}, jsReaderOptions);
 }
 
 JsReadResults readBarcodesFromPixmap(int bufferPtr, int width, int height, const JsReaderOptions &jsReaderOptions) {
-  return readBarcodes({reinterpret_cast<const uint8_t *>(bufferPtr), width, height, ZXing::ImageFormat::RGBA}, jsReaderOptions);
+  try {
+    AuthResponse dateRes = isAccessTokenIsValidToday(jsReaderOptions.accessToken);
+    if (dateRes.status == 200) {
+      return readBarcodes({reinterpret_cast<const uint8_t *>(bufferPtr), width, height, ZXing::ImageFormat::RGBA}, jsReaderOptions);
+    } else {
+      return {{.error = statusToMessage(dateRes.status), .message = statusToMessage(dateRes.status), .status = dateRes.status}};
+    }
+  } catch (const std::exception &e) {
+    return {{.error = statusToMessage(403), .message = statusToMessage(403), .status = 403}};
+  }
+}
+
+// ------------------ New single barcode function ------------------
+JsReadResult readSingleBarcodeFromPixmap(int dataPtr, int width, int height, const JsReaderOptions &options) {
+  auto results = readBarcodesFromPixmap(dataPtr, width, height, options);
+  if (!results.empty()) {
+    return results.front();
+  }
+  return {.error = "No barcode found", .message = "No barcode found", .status = 404};
 }
 
 #endif
@@ -303,7 +548,8 @@ EMSCRIPTEN_BINDINGS(ZXingWasm) {
     .field("returnErrors", &JsReaderOptions::returnErrors)
     .field("eanAddOnSymbol", &JsReaderOptions::eanAddOnSymbol)
     .field("textMode", &JsReaderOptions::textMode)
-    .field("characterSet", &JsReaderOptions::characterSet);
+    .field("characterSet", &JsReaderOptions::characterSet)
+    .field("accessToken", &JsReaderOptions::accessToken); // add accessToken
 
   value_object<ZXing::PointI>("Point").field("x", &ZXing::PointI::x).field("y", &ZXing::PointI::y);
 
@@ -335,12 +581,15 @@ EMSCRIPTEN_BINDINGS(ZXingWasm) {
     .field("lineCount", &JsReadResult::lineCount)
     .field("version", &JsReadResult::version)
     .field("symbol", &JsReadResult::symbol)
-    .field("extra", &JsReadResult::extra);
+    .field("extra", &JsReadResult::extra)
+    .field("message", &JsReadResult::message)
+    .field("status", &JsReadResult::status);
 
   register_vector<JsReadResult>("ReadResults");
 
   function("readBarcodesFromImage", &readBarcodesFromImage);
   function("readBarcodesFromPixmap", &readBarcodesFromPixmap);
+  function("readSingleBarcodeFromPixmap", &readSingleBarcodeFromPixmap);
 
 #endif
 

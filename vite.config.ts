@@ -40,8 +40,8 @@ export default defineConfig({
       babelConfig: {
         plugins: [emscriptenPatch()],
       },
-      filter: /zxing_(reader|writer|full)\.js$/,
-      include: /zxing_(reader|writer|full)\.js$/,
+      filter: /scanx_(reader|writer|full)\.js$/,
+      include: /scanx_(reader|writer|full)\.js$/,
     }),
   ],
   define: {
@@ -52,7 +52,7 @@ export default defineConfig({
         .update(
           await readFile(
             fileURLToPath(
-              new URL("./src/reader/zxing_reader.wasm", import.meta.url),
+              new URL("./src/reader/scanx_reader.wasm", import.meta.url),
             ),
           ),
         )
@@ -63,7 +63,7 @@ export default defineConfig({
         .update(
           await readFile(
             fileURLToPath(
-              new URL("./src/writer/zxing_writer.wasm", import.meta.url),
+              new URL("./src/writer/scanx_writer.wasm", import.meta.url),
             ),
           ),
         )
@@ -74,7 +74,7 @@ export default defineConfig({
         .update(
           await readFile(
             fileURLToPath(
-              new URL("./src/full/zxing_full.wasm", import.meta.url),
+              new URL("./src/full/scanx_full.wasm", import.meta.url),
             ),
           ),
         )

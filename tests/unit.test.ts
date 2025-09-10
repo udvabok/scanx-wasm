@@ -1,14 +1,14 @@
+import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { createCanvas, loadImage } from "@napi-rs/canvas";
 import { afterAll, beforeAll, describe, expect, test, vi } from "vitest";
 import {
-  prepareZXingModule as prepareZXingFullModule,
-  purgeZXingModule as purgeZXingFullModule,
+  prepareScanXModule as prepareScanXFullModule,
+  purgeScanXModule as purgeScanXFullModule,
 } from "../src/full/index.js";
 import {
-  prepareZXingModule as prepareZXingReaderModule,
+  prepareScanXModule as prepareScanXReaderModule,
   readBarcodes,
 } from "../src/reader/index.js";
 
@@ -20,13 +20,13 @@ describe("prepare zxing module", () => {
   });
 
   test("no module promise should be created without fireImmediately", () => {
-    const modulePromise = prepareZXingFullModule();
+    const modulePromise = prepareScanXFullModule();
 
     expect(modulePromise).toBe(undefined);
   });
 
   test("module promise should be created with fireImmediately", () => {
-    const modulePromise = prepareZXingFullModule({
+    const modulePromise = prepareScanXFullModule({
       fireImmediately: true,
     });
 
@@ -36,13 +36,13 @@ describe("prepare zxing module", () => {
   });
 
   test("module promise should be reused with no overrides", () => {
-    const modulePromise1 = prepareZXingFullModule({
+    const modulePromise1 = prepareScanXFullModule({
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       fireImmediately: true,
     });
 
@@ -54,14 +54,14 @@ describe("prepare zxing module", () => {
   test("module promise should be reused with same overrides (Object.is)", () => {
     const overrides = {};
 
-    const modulePromise1 = prepareZXingFullModule({
+    const modulePromise1 = prepareScanXFullModule({
       overrides,
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       overrides,
       fireImmediately: true,
     });
@@ -72,14 +72,14 @@ describe("prepare zxing module", () => {
   });
 
   test("module promise should be reused with same overrides (shallow)", () => {
-    const modulePromise1 = prepareZXingFullModule({
+    const modulePromise1 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
@@ -90,7 +90,7 @@ describe("prepare zxing module", () => {
   });
 
   test("module promise shouldn't be reused with different overrides", () => {
-    const modulePromise1 = prepareZXingFullModule({
+    const modulePromise1 = prepareScanXFullModule({
       overrides: {
         locateFile: (url) => url,
       },
@@ -99,14 +99,14 @@ describe("prepare zxing module", () => {
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise2.catch(() => {});
 
-    const modulePromise3 = prepareZXingFullModule({
+    const modulePromise3 = prepareScanXFullModule({
       overrides: {
         locateFile: (url) => url,
       },
@@ -120,14 +120,14 @@ describe("prepare zxing module", () => {
   });
 
   test("equalityFn should work", () => {
-    const modulePromise1 = prepareZXingFullModule({
+    const modulePromise1 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
       equalityFn: Object.is,
@@ -138,17 +138,17 @@ describe("prepare zxing module", () => {
     expect(modulePromise1).not.toBe(modulePromise2);
   });
 
-  test("purgeZXingModule should work", () => {
-    const modulePromise1 = prepareZXingFullModule({
+  test("purgeScanXModule should work", () => {
+    const modulePromise1 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    purgeZXingFullModule();
+    purgeScanXFullModule();
 
-    const modulePromise2 = prepareZXingFullModule({
+    const modulePromise2 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
@@ -158,24 +158,24 @@ describe("prepare zxing module", () => {
     expect(modulePromise1).not.toBe(modulePromise2);
   });
 
-  test("purgeZXingModule shouldn't affect each other", () => {
-    const modulePromise1 = prepareZXingFullModule({
+  test("purgeScanXModule shouldn't affect each other", () => {
+    const modulePromise1 = prepareScanXFullModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise1.catch(() => {});
 
-    const modulePromise2 = prepareZXingReaderModule({
+    const modulePromise2 = prepareScanXReaderModule({
       overrides: {},
       fireImmediately: true,
     });
 
     modulePromise2.catch(() => {});
 
-    purgeZXingFullModule();
+    purgeScanXFullModule();
 
-    const modulePromise3 = prepareZXingReaderModule({
+    const modulePromise3 = prepareScanXReaderModule({
       overrides: {},
       fireImmediately: true,
     });
@@ -192,11 +192,11 @@ describe("readBarcodes input", async () => {
   );
 
   beforeAll(async () => {
-    await prepareZXingReaderModule({
+    await prepareScanXReaderModule({
       overrides: {
         wasmBinary: (
           await readFile(
-            resolve(import.meta.dirname, "../src/reader/zxing_reader.wasm"),
+            resolve(import.meta.dirname, "../src/reader/scanx_reader.wasm"),
           )
         ).buffer as ArrayBuffer,
       },

@@ -1,9 +1,10 @@
 ///<reference types="vite/client"/>
 
+// biome-ignore assist/source/organizeImports: <explanation>
 import {
   type ReaderOptions,
-  readBarcodes,
   type WriterOptions,
+  readBarcodes,
   writeBarcode,
 } from "./src/full/index.js";
 
@@ -15,6 +16,7 @@ const readerOptions: ReaderOptions = {
   tryHarder: true,
   formats: ["QRCode"],
   maxNumberOfSymbols: 1,
+  accessToken: "",
 };
 
 const imageFileReadResults = await readBarcodes(imageFile, readerOptions);

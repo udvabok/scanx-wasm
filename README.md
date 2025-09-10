@@ -2,11 +2,11 @@
 
 > [!NOTE]
 >
-> For the v1 release, please visit the [`channel/v1`](https://www.github.com/Sec-ant/zxing-wasm/tree/channel/v1) branch.
+> For the v1 release, please visit the [`channel/v1`](https://www.github.com/Sec-ant/scanx-wasm/tree/channel/v1) branch.
 
-# zxing-wasm
+# scanx-wasm
 
-[![npm](https://img.shields.io/npm/v/zxing-wasm)](https://www.npmjs.com/package/zxing-wasm/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/zxing-wasm)](https://www.npmjs.com/package/zxing-wasm/v/latest) [![jsDelivr hits](https://img.shields.io/jsdelivr/npm/hm/zxing-wasm?color=%23ff5627)](https://cdn.jsdelivr.net/npm/zxing-wasm@latest/) [![deploy status](https://github.com/Sec-ant/zxing-wasm/actions/workflows/deploy.yml/badge.svg)](https://github.com/Sec-ant/zxing-wasm/actions/workflows/deploy.yml)
+[![npm](https://img.shields.io/npm/v/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![jsDelivr hits](https://img.shields.io/jsdelivr/npm/hm/scanx-wasm?color=%23ff5627)](https://cdn.jsdelivr.net/npm/scanx-wasm@latest/) [![deploy status](https://github.com/Sec-ant/scanx-wasm/actions/workflows/deploy.yml/badge.svg)](https://github.com/Sec-ant/scanx-wasm/actions/workflows/deploy.yml)
 
 [ZXing-C++](https://github.com/zxing-cpp/zxing-cpp) WebAssembly as an ES/CJS module with types. Read or write barcodes in various JS runtimes: Web, Node.js, Bun, and Deno.
 
@@ -39,13 +39,13 @@
 
 </div>
 
-Visit [this online demo](https://zxing-wasm-demo.deno.dev/) to quickly explore its basic reading functions. It works best on the latest Chromium browsers.
+Visit [this online demo](https://scanx-wasm-demo.deno.dev/) to quickly explore its basic reading functions. It works best on the latest Chromium browsers.
 
 ## Build
 
 ```bash
 git clone --recurse-submodules https://github.com/udvabok/scanx-wasm.git
-cd zxing-wasm
+cd scanx-wasm
 
 # Install pnpm before executing the next command:
 # https://pnpm.io/installation
@@ -63,51 +63,51 @@ pnpm build
 ## Install
 
 ```bash
-npm i zxing-wasm
+npm i scanx-wasm
 ```
 
 ## Documentation
 
-<https://zxing-wasm.deno.dev/>
+<https://scanx-wasm.deno.dev/>
 
 ## Demo
 
-Demo page: https://zxing-wasm-demo.deno.dev/
+Demo page: https://scanx-wasm-demo.deno.dev/
 
-Demo source: https://github.com/Sec-ant/zxing-wasm-demo
+Demo source: https://github.com/Sec-ant/scanx-wasm-demo
 
 ## Usage
 
 This package exports three subpaths: `full`, `reader`, and `writer`.
 
-### `zxing-wasm` or `zxing-wasm/full`
+### `scanx-wasm` or `scanx-wasm/full`
 
 These two subpaths provide functions to read and write barcodes. The wasm binary size is ~1.31 MB.
 
 ```ts
-import { readBarcodes, writeBarcode } from "zxing-wasm";
+import { readBarcodes, writeBarcode } from "scanx-wasm";
 ```
 
 or
 
 ```ts
-import { readBarcodes, writeBarcode } from "zxing-wasm/full";
+import { readBarcodes, writeBarcode } from "scanx-wasm/full";
 ```
 
-### `zxing-wasm/reader`
+### `scanx-wasm/reader`
 
 This subpath only provides a function to read barcodes. The wasm binary size is ~911 KB.
 
 ```ts
-import { readBarcodes } from "zxing-wasm/reader";
+import { readBarcodes } from "scanx-wasm/reader";
 ```
 
-### `zxing-wasm/writer`
+### `scanx-wasm/writer`
 
 This subpath only provides a function to write barcodes. The wasm binary size is ~600 KB.
 
 ```ts
-import { writeBarcode } from "zxing-wasm/writer";
+import { writeBarcode } from "scanx-wasm/writer";
 ```
 
 ### IIFE Scripts
@@ -119,25 +119,25 @@ Apart from ES and CJS modules, this package also ships IIFE scripts. The registe
 
 ```html
 <!-- full -->
-<script src="https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/iife/full/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/iife/full/index.js"></script>
 
 <!-- reader -->
-<script src="https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/iife/reader/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/iife/reader/index.js"></script>
 
 <!-- writer -->
-<script src="https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/iife/writer/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/iife/writer/index.js"></script>
 ```
 
-### [`readBarcodes`](https://zxing-wasm.deno.dev/functions/full.readBarcodes.html)
+### [`readBarcodes`](https://scanx-wasm.deno.dev/functions/full.readBarcodes.html)
 
-[`readBarcodes`](https://zxing-wasm.deno.dev/functions/full.readBarcodes.html) accepts an image [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob), image [`File`](https://developer.mozilla.org/docs/Web/API/File), [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), [`Uint8Array`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array), or an [`ImageData`](https://developer.mozilla.org/docs/Web/API/ImageData) as its first argument, and various options are supported in [`ReaderOptions`](https://zxing-wasm.deno.dev/interfaces/full.ReaderOptions.html) as an optional second argument.
+[`readBarcodes`](https://scanx-wasm.deno.dev/functions/full.readBarcodes.html) accepts an image [`Blob`](https://developer.mozilla.org/docs/Web/API/Blob), image [`File`](https://developer.mozilla.org/docs/Web/API/File), [`ArrayBuffer`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer), [`Uint8Array`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array), or an [`ImageData`](https://developer.mozilla.org/docs/Web/API/ImageData) as its first argument, and various options are supported in [`ReaderOptions`](https://scanx-wasm.deno.dev/interfaces/full.ReaderOptions.html) as an optional second argument.
 
-The return result of this function is a `Promise` of an array of [`ReadResult`](https://zxing-wasm.deno.dev/interfaces/full.ReadResult.html)s.
+The return result of this function is a `Promise` of an array of [`ReadResult`](https://scanx-wasm.deno.dev/interfaces/full.ReadResult.html)s.
 
 e.g.
 
 ```ts
-import { readBarcodes, type ReaderOptions } from "zxing-wasm/reader";
+import { readBarcodes, type ReaderOptions } from "scanx-wasm/reader";
 
 const readerOptions: ReaderOptions = {
   tryHarder: true,
@@ -173,16 +173,16 @@ const imageDataReadResults = await readBarcodes(imageData, readerOptions);
 console.log(imageDataReadResults[0].text); // Hello world!
 ```
 
-### [`writeBarcode`](https://zxing-wasm.deno.dev/functions/full.writeBarcode.html)
+### [`writeBarcode`](https://scanx-wasm.deno.dev/functions/full.writeBarcode.html)
 
-The first argument of [`writeBarcode`](https://zxing-wasm.deno.dev/functions/full.writeBarcode.html) is a text string or an [`Uint8Array`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) of bytes to be encoded, and the optional second argument [`WriterOptions`](https://zxing-wasm.deno.dev/interfaces/full.WriterOptions.html) accepts several writer options.
+The first argument of [`writeBarcode`](https://scanx-wasm.deno.dev/functions/full.writeBarcode.html) is a text string or an [`Uint8Array`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array) of bytes to be encoded, and the optional second argument [`WriterOptions`](https://scanx-wasm.deno.dev/interfaces/full.WriterOptions.html) accepts several writer options.
 
-The return result of this function is a `Promise` of a [`WriteResult`](https://zxing-wasm.deno.dev/interfaces/full.WriteResult.html).
+The return result of this function is a `Promise` of a [`WriteResult`](https://scanx-wasm.deno.dev/interfaces/full.WriteResult.html).
 
 e.g.
 
 ```ts
-import { writeBarcode, type WriterOptions } from "zxing-wasm/writer";
+import { writeBarcode, type WriterOptions } from "scanx-wasm/writer";
 
 const writerOptions: WriterOptions = {
   format: "QRCode",
@@ -200,21 +200,21 @@ console.log(writeOutput.image); // A PNG image blob.
 
 ### Serving via Web or CDN
 
-When using this package, a `.wasm` binary file needs to be served somewhere, so the runtime can fetch, compile and instantiate the WASM module. To provide a smooth development experience, the serve path is automatically assigned a [jsDelivr CDN](https://fastly.jsdelivr.net/npm/zxing-wasm/) URL upon build.
+When using this package, a `.wasm` binary file needs to be served somewhere, so the runtime can fetch, compile and instantiate the WASM module. To provide a smooth development experience, the serve path is automatically assigned a [jsDelivr CDN](https://fastly.jsdelivr.net/npm/scanx-wasm/) URL upon build.
 
-If you want to change the serve path to your own server or other CDNs, please use [`prepareZXingModule`](https://zxing-wasm.deno.dev/functions/full.prepareZXingModule.html) and pass an [`overrides`](http://localhost:4173/interfaces/full.PrepareZXingModuleOptions.html#overrides) object with a custom defined [`locateFile`](https://emscripten.org/docs/api_reference/module.html?highlight=locatefile#Module.locateFile) function before reading or writing barcodes. `locateFile` is one of the [Emscripten `Module` attribute hooks](https://emscripten.org/docs/api_reference/module.html#affecting-execution) that can affect the code execution of the `Module` object during its lifecycle.
+If you want to change the serve path to your own server or other CDNs, please use [`prepareScanXModule`](https://scanx-wasm.deno.dev/functions/full.prepareScanXModule.html) and pass an [`overrides`](http://localhost:4173/interfaces/full.PrepareScanXModuleOptions.html#overrides) object with a custom defined [`locateFile`](https://emscripten.org/docs/api_reference/module.html?highlight=locatefile#Module.locateFile) function before reading or writing barcodes. `locateFile` is one of the [Emscripten `Module` attribute hooks](https://emscripten.org/docs/api_reference/module.html#affecting-execution) that can affect the code execution of the `Module` object during its lifecycle.
 
 e.g.
 
 ```ts
-import { prepareZXingModule, writeBarcode } from "zxing-wasm";
+import { prepareScanXModule, writeBarcode } from "scanx-wasm";
 
 // Override the locateFile function
-prepareZXingModule({
+prepareScanXModule({
   overrides: {
     locateFile: (path, prefix) => {
       if (path.endsWith(".wasm")) {
-        return `https://unpkg.com/zxing-wasm@2/dist/full/${path}`;
+        return `https://unpkg.com/scanx-wasm@2/dist/full/${path}`;
       }
       return prefix + path;
     },
@@ -230,11 +230,11 @@ const writeOutput = await writeBarcode("Hello world!");
 > The default jsDelivr CDN serve path is also achieved by overriding the custom `locateFile` function:
 >
 > ```ts
-> const DEFAULT_MODULE_OVERRIDES: ZXingModuleOverrides = {
+> const DEFAULT_MODULE_OVERRIDES: ScanXModuleOverrides = {
 >   locateFile: (path, prefix) => {
 >     const match = path.match(/_(.+?)\.wasm$/);
 >     if (match) {
->       return `https://fastly.jsdelivr.net/npm/zxing-wasm@${ZXING_WASM_VERSION}/dist/${match[1]}/${path}`;
+>       return `https://fastly.jsdelivr.net/npm/scanx-wasm@${SCANX_WASM_VERSION}/dist/${match[1]}/${path}`;
 >     }
 >     return prefix + path;
 >   },
@@ -251,11 +251,11 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 
    ```ts
    import { readFileSync } from "node:fs";
-   import { prepareZXingModule } from "zxing-wasm/reader";
+   import { prepareScanXModule } from "scanx-wasm/reader";
 
-   const wasmFileBuffer = readFileSync("/path/to/the/zxing_reader.wasm");
+   const wasmFileBuffer = readFileSync("/path/to/the/scanx_reader.wasm");
 
-   prepareZXingModule({
+   prepareScanXModule({
      overrides: {
        instantiateWasm(imports, successCallback) {
          WebAssembly.instantiate(wasmFileBuffer, imports).then(({ instance }) =>
@@ -271,11 +271,11 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 
    ```ts
    import { readFileSync } from "node:fs";
-   import { prepareZXingModule } from "zxing-wasm/reader";
+   import { prepareScanXModule } from "scanx-wasm/reader";
 
-   prepareZXingModule({
+   prepareScanXModule({
      overrides: {
-       wasmBinary: readFileSync("/path/to/the/zxing_reader.wasm")
+       wasmBinary: readFileSync("/path/to/the/scanx_reader.wasm")
          .buffer as ArrayBuffer,
      },
    });
@@ -285,16 +285,16 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 
    ```ts
    import { readFileSync } from "node:fs";
-   import { prepareZXingModule } from "zxing-wasm/reader";
+   import { prepareScanXModule } from "scanx-wasm/reader";
 
    // Create an Object URL for the .wasm file.
    const wasmFileUrl = URL.createObjectURL(
-     new Blob([readFileSync("/path/to/the/zxing_reader.wasm")], {
+     new Blob([readFileSync("/path/to/the/scanx_reader.wasm")], {
        type: "application/wasm",
      }),
    );
 
-   prepareZXingModule({
+   prepareScanXModule({
      overrides: {
        locateFile: (path, prefix) => {
          if (path.endsWith(".wasm")) {
@@ -317,14 +317,14 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 
    ```ts
    import { readFileSync } from "node:fs";
-   import { prepareZXingModule } from "zxing-wasm/reader";
+   import { prepareScanXModule } from "scanx-wasm/reader";
 
-   const wasmBase64 = readFileSync("/path/to/the/zxing_reader.wasm").toString(
+   const wasmBase64 = readFileSync("/path/to/the/scanx_reader.wasm").toString(
      "base64",
    );
    const wasmUrl = `data:application/wasm;base64,${wasmBase64}`;
 
-   prepareZXingModule({
+   prepareScanXModule({
      overrides: {
        locateFile: (path, prefix) => {
          if (path.endsWith(".wasm")) {
@@ -339,15 +339,15 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 > [!NOTE]
 > To use this library in a WeChat mini program <img src="https://github.com/user-attachments/assets/7d8f3337-dd9c-43ec-aab4-8d4e72d32867" width="16" height="16">, there are several things to keep in mind:
 >
-> 1. Only the `zxing-wasm` import path is supported; `zxing-wasm/reader` or `zxing-wasm/writer` is not supported.
-> 2. Before using the library, you need to copy/move the `node_modules/zxing-wasm/dist/full/zxing_full.wasm` file into your project directory.
-> 3. You must use `prepareZXingModule` to configure how the `.wasm` file will be fetched, loaded, and compiled before calling `readBarcodes` or `writeBarcode`. This is mandatory, and you can do so with the following code:
+> 1. Only the `scanx-wasm` import path is supported; `scanx-wasm/reader` or `scanx-wasm/writer` is not supported.
+> 2. Before using the library, you need to copy/move the `node_modules/scanx-wasm/dist/full/scanx_full.wasm` file into your project directory.
+> 3. You must use `prepareScanXModule` to configure how the `.wasm` file will be fetched, loaded, and compiled before calling `readBarcodes` or `writeBarcode`. This is mandatory, and you can do so with the following code:
 >
 >    ```typescript
->    prepareZXingModule({
+>    prepareScanXModule({
 >      overrides: {
 >        instantiateWasm(imports, successCallback) {
->          WXWebAssembly.instantiate("path/to/zxing_full.wasm", imports).then(
+>          WXWebAssembly.instantiate("path/to/scanx_full.wasm", imports).then(
 >            ({ instance }) => successCallback(instance),
 >          );
 >          return {};
@@ -356,68 +356,68 @@ If you want to use this library in non-web runtimes (such as Node.js, Bun, Deno,
 >    });
 >    ```
 >
->    Note that WeChat mini programs use `WXWebAssembly` instead of the standard `WebAssembly`, and the first argument in `WXWebAssembly.instantiate` should point to the location where the `zxing_full.wasm` file was moved earlier.
+>    Note that WeChat mini programs use `WXWebAssembly` instead of the standard `WebAssembly`, and the first argument in `WXWebAssembly.instantiate` should point to the location where the `scanx_full.wasm` file was moved earlier.
 >
 > 4. This library uses a bare minimum `Blob` polyfill in the mini program environment so that no errors will be thrown if you call `writeBarcode`. However, it's recommended to use a full-fledged `Blob` polyfill for not breaking other parts of your program.
 
 > [!IMPORTANT]
 >
-> Each version of this library has a unique corresponding `.wasm` file. If you choose to serve it yourself, please ensure that the `.wasm` file matches the version of the `zxing-wasm` library you are using. Otherwise, you may encounter unexpected errors.
+> Each version of this library has a unique corresponding `.wasm` file. If you choose to serve it yourself, please ensure that the `.wasm` file matches the version of the `scanx-wasm` library you are using. Otherwise, you may encounter unexpected errors.
 
-For convenience, this library provides an exported `ZXING_WASM_VERSION` variable to indicate the resolved version of the `zxing-wasm` you are using:
-
-```ts
-import { ZXING_WASM_VERSION } from "zxing-wasm";
-```
-
-The commit hash of the `zxing-cpp` submodule is exported as `ZXING_CPP_COMMIT`:
+For convenience, this library provides an exported `SCANX_WASM_VERSION` variable to indicate the resolved version of the `scanx-wasm` you are using:
 
 ```ts
-import { ZXING_CPP_COMMIT } from "zxing-wasm";
+import { SCANX_WASM_VERSION } from "scanx-wasm";
 ```
 
-The SHA-256 hash of the `.wasm` file (in hex format) is also exported as `ZXING_WASM_SHA256`, in case you want to make sure you are serving the exactly same file:
+The commit hash of the `zxing-cpp` submodule is exported as `SCANX_CPP_COMMIT`:
 
 ```ts
-import { ZXING_WASM_SHA256 } from "zxing-wasm";
+import { SCANX_CPP_COMMIT } from "scanx-wasm";
 ```
 
-To acquire the `.wasm` files for customized serving, in addition to finding them by searching in your `node_modules` folder, they can also be downloaded from CDNs like [jsDelivr](https://cdn.jsdelivr.net/npm/zxing-wasm@latest/dist/):
+The SHA-256 hash of the `.wasm` file (in hex format) is also exported as `SCANX_WASM_SHA256`, in case you want to make sure you are serving the exactly same file:
 
-- **`zxing_full.wasm`**:
+```ts
+import { SCANX_WASM_SHA256 } from "scanx-wasm";
+```
+
+To acquire the `.wasm` files for customized serving, in addition to finding them by searching in your `node_modules` folder, they can also be downloaded from CDNs like [jsDelivr](https://cdn.jsdelivr.net/npm/scanx-wasm@latest/dist/):
+
+- **`scanx_full.wasm`**:
 
   ```text
-  https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/full/zxing_full.wasm
+  https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/full/scanx_full.wasm
   ```
 
-- **`zxing_reader.wasm`**:
+- **`scanx_reader.wasm`**:
 
   ```text
-  https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/reader/zxing_reader.wasm
+  https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/reader/scanx_reader.wasm
   ```
 
-- **`zxing_writer.wasm`**:
+- **`scanx_writer.wasm`**:
 
   ```text
-  https://cdn.jsdelivr.net/npm/zxing-wasm@<version>/dist/writer/zxing_writer.wasm
+  https://cdn.jsdelivr.net/npm/scanx-wasm@<version>/dist/writer/scanx_writer.wasm
   ```
 
 ## Controlling `.wasm` Instantiation Timing and Caching
 
-By default, the `.wasm` binary will not be fetched and instantiated until a `readBarcodes` or `writeBarcode` function is called. This behavior avoids unnecessary network requests and instantiation overhead if you decide to override the default `.wasm` serving path or other settings before using the library. Calling `prepareZXingModule` with `overrides` alone does not change this default behavior:
+By default, the `.wasm` binary will not be fetched and instantiated until a `readBarcodes` or `writeBarcode` function is called. This behavior avoids unnecessary network requests and instantiation overhead if you decide to override the default `.wasm` serving path or other settings before using the library. Calling `prepareScanXModule` with `overrides` alone does not change this default behavior:
 
 ```ts
-prepareZXingModule({
+prepareScanXModule({
   overrides: {
     /* ... your desired overrides ... */
   },
 }); // <-- returns void
 ```
 
-However, if you want to explicitly trigger the download and instantiation of the `.wasm` binary, you can set the [`fireImmediately`](https://zxing-wasm.deno.dev/interfaces/full.PrepareZXingModuleOptions.html#fireimmediately) option to `true`. Doing so also causes `prepareZXingModule` to return a `Promise` that resolves to the underlying Emscripten module. This allows you to `await` the instantiation process:
+However, if you want to explicitly trigger the download and instantiation of the `.wasm` binary, you can set the [`fireImmediately`](https://scanx-wasm.deno.dev/interfaces/full.PrepareScanXModuleOptions.html#fireimmediately) option to `true`. Doing so also causes `prepareScanXModule` to return a `Promise` that resolves to the underlying Emscripten module. This allows you to `await` the instantiation process:
 
 ```ts
-prepareZXingModule({
+prepareScanXModule({
   overrides: {
     /* ... your desired overrides ... */
   },
@@ -425,10 +425,10 @@ prepareZXingModule({
 }); // <-- returns a promise
 ```
 
-Because different `overrides` settings can influence how this library locates and instantiates the `.wasm` binary, the library performs an equality check on `overrides` to determine if the `.wasm` binary should be re-fetched and re-instantiated. By default, it is determined by a shallow comparison of the `overrides` object. If you prefer a different method of comparison, you can supply a custom [`equalityFn`](https://zxing-wasm.deno.dev/interfaces/full.PrepareZXingModuleOptions.html#equalityfn):
+Because different `overrides` settings can influence how this library locates and instantiates the `.wasm` binary, the library performs an equality check on `overrides` to determine if the `.wasm` binary should be re-fetched and re-instantiated. By default, it is determined by a shallow comparison of the `overrides` object. If you prefer a different method of comparison, you can supply a custom [`equalityFn`](https://scanx-wasm.deno.dev/interfaces/full.PrepareScanXModuleOptions.html#equalityfn):
 
 ```ts
-prepareZXingModule({
+prepareScanXModule({
   overrides: {
     /* ... your desired overrides ... */
   },
@@ -452,7 +452,6 @@ prepareZXingModule({
    ```
 
 3. **Are there any higher level libraries that can be used to simplify the usage of this library?**
-
    - [barcode-detector](https://github.com/Sec-ant/barcode-detector): A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill / ponyfill that uses this library under the hood.
    - [vue-qrcode-reader](https://github.com/gruhn/vue-qrcode-reader): A set of Vue.js components for detecting QR codes and various other barcode formats right in the browser which uses [barcode-detector](https://github.com/Sec-ant/barcode-detector) under the hood.
    - [@yudiel/react-qr-scanner](https://github.com/yudielcurbelo/react-qr-scanner): A library to scan QR Codes in react which uses [barcode-detector](https://github.com/Sec-ant/barcode-detector) under the hood.
@@ -477,6 +476,6 @@ prepareZXingModule({
 This project contains code from multiple sources, each with its own license:
 
 - [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp): [Apache License 2.0](https://github.com/zxing-cpp/zxing-cpp/blob/master/LICENSE)
-- [src/cpp/ZXingWasm.cpp](https://github.com/Sec-ant/zxing-wasm/blob/main/src/cpp/ZXingWasm.cpp): [Apache License 2.0](https://github.com/Sec-ant/zxing-wasm/blob/main/src/cpp/LICENSE)
+- [src/cpp/ScanXWasm.cpp](https://github.com/Sec-ant/scanx-wasm/blob/main/src/cpp/ScanXWasm.cpp): [Apache License 2.0](https://github.com/Sec-ant/scanx-wasm/blob/main/src/cpp/LICENSE)
 - [zint](https://sourceforge.net/projects/zint/): [BSD 3-Clause License](https://sourceforge.net/p/zint/code/ci/master/tree/LICENSE)
-- zxing-wasm specific code: [MIT License](https://github.com/Sec-ant/zxing-wasm/blob/main/LICENSE)
+- scanx-wasm specific code: [MIT License](https://github.com/Sec-ant/scanx-wasm/blob/main/LICENSE)

@@ -51,7 +51,7 @@
 
 ### Patch Changes
 
-- 6321b02: Add `ZXING_CPP_COMMIT` export.
+- 6321b02: Add `SCANX_CPP_COMMIT` export.
 
 ## 2.0.0
 
@@ -101,13 +101,13 @@ The `WriterOptions` object has also been updated completely.
 
 #### `.wasm` Module Initialization / Caching Overhaul
 
-`prepareZXingModule(...)` replaces both `setZXingModuleOverrides(...)` and `getZXingModuleOverrides(...)`. The new function provides a more flexible way to initialize the ZXing module with custom options.
+`prepareScanXModule(...)` replaces both `setScanXModuleOverrides(...)` and `getScanXModuleOverrides(...)`. The new function provides a more flexible way to initialize the ZXing module with custom options.
 
 > [!NOTE]
 >
-> The v1 module initialization functions `setZXingModuleOverrides` and `getZXingModuleOverrides` are still kept for a smooth migration experience, but marked as deprecated.
+> The v1 module initialization functions `setScanXModuleOverrides` and `getScanXModuleOverrides` are still kept for a smooth migration experience, but marked as deprecated.
 
-`purgeZXingModule` now only clears the relevant module cache from where it is imported. It no longer resets the global module cache.
+`purgeScanXModule` now only clears the relevant module cache from where it is imported. It no longer resets the global module cache.
 
 #### Redefined `BarcodeFormat`-Family Types
 
@@ -133,7 +133,7 @@ The subpath export types are now compatible with TypeScript's `moduleResolution:
 
 ### Patch Changes
 
-- f8c33b2: Fix the `zxing_writer.wasm` size issue. See [#190](https://github.com/Sec-ant/zxing-wasm/discussions/190).
+- f8c33b2: Fix the `scanx_writer.wasm` size issue. See [#190](https://github.com/Sec-ant/zxing-wasm/discussions/190).
 
 ## 2.0.0-beta.3
 
@@ -206,13 +206,13 @@ The subpath export types are now compatible with TypeScript's `moduleResolution:
 
   ### Module Initialization / Caching Overhaul
 
-  `prepareZXingModule(...)` replaces both `setZXingModuleOverrides(...)` and `getZXingModuleOverrides(...)`. The new function provides a more flexible way to initialize the ZXing module with custom options.
+  `prepareScanXModule(...)` replaces both `setScanXModuleOverrides(...)` and `getScanXModuleOverrides(...)`. The new function provides a more flexible way to initialize the ZXing module with custom options.
 
   > [!NOTE]
   >
-  > The v1 module initialization functions `setZXingModuleOverrides` and `getZXingModuleOverrides` are still kept for a smooth migration experience, but marked as deprecated.
+  > The v1 module initialization functions `setScanXModuleOverrides` and `getScanXModuleOverrides` are still kept for a smooth migration experience, but marked as deprecated.
 
-  `purgeZXingModule` now only clears the relevant module cache from where it is imported. It no longer resets the global module cache.
+  `purgeScanXModule` now only clears the relevant module cache from where it is imported. It no longer resets the global module cache.
 
   ## New Features & Enhancements
 

@@ -1,7 +1,7 @@
 /**
  * @internal
  */
-export interface ZXingPoint {
+export interface ScanXPoint {
   x: number;
   y: number;
 }
@@ -9,11 +9,11 @@ export interface ZXingPoint {
 /**
  * @internal
  */
-export interface ZXingPosition {
-  topLeft: ZXingPoint;
-  topRight: ZXingPoint;
-  bottomLeft: ZXingPoint;
-  bottomRight: ZXingPoint;
+export interface ScanXPosition {
+  topLeft: ScanXPoint;
+  topRight: ScanXPoint;
+  bottomLeft: ScanXPoint;
+  bottomRight: ScanXPoint;
 }
 
 /**
@@ -24,7 +24,7 @@ export interface ZXingPosition {
  *
  * @see {@link Position | `Position`}
  */
-export interface Point extends ZXingPoint {}
+export interface Point extends ScanXPoint {}
 
 /**
  * Position of the decoded barcode.

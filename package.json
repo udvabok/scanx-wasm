@@ -1,6 +1,6 @@
 {
-  "name": "zxing-wasm",
-  "description": "ZXing-C++ WebAssembly as an ES/CJS module with types",
+  "name": "scanx-wasm",
+  "description": "Scanx-C++ WebAssembly as an ES/CJS module with types",
   "private": false,
   "version": "2.2.1",
   "type": "module",
@@ -31,46 +31,46 @@
       "require": "./dist/cjs/writer/index.js",
       "default": "./dist/es/writer/index.js"
     },
-    "./full/zxing_full.wasm": {
+    "./full/scanx_full.wasm": {
       "import": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/full/zxing_full.wasm"
+        "default": "./dist/full/scanx_full.wasm"
       },
       "require": {
         "types": "./dist/cjs/types/wasm.d.ts",
-        "default": "./dist/full/zxing_full.wasm"
+        "default": "./dist/full/scanx_full.wasm"
       },
       "default": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/full/zxing_full.wasm"
+        "default": "./dist/full/scanx_full.wasm"
       }
     },
-    "./reader/zxing_reader.wasm": {
+    "./reader/scanx_reader.wasm": {
       "import": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/reader/zxing_reader.wasm"
+        "default": "./dist/reader/scanx_reader.wasm"
       },
       "require": {
         "types": "./dist/cjs/types/wasm.d.ts",
-        "default": "./dist/reader/zxing_reader.wasm"
+        "default": "./dist/reader/scanx_reader.wasm"
       },
       "default": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/reader/zxing_reader.wasm"
+        "default": "./dist/reader/scanx_reader.wasm"
       }
     },
-    "./writer/zxing_writer.wasm": {
+    "./writer/scanx_writer.wasm": {
       "import": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/writer/zxing_writer.wasm"
+        "default": "./dist/writer/scanx_writer.wasm"
       },
       "require": {
         "types": "./dist/cjs/types/wasm.d.ts",
-        "default": "./dist/writer/zxing_writer.wasm"
+        "default": "./dist/writer/scanx_writer.wasm"
       },
       "default": {
         "types": "./dist/es/types/wasm.d.ts",
-        "default": "./dist/writer/zxing_writer.wasm"
+        "default": "./dist/writer/scanx_writer.wasm"
       }
     },
     "./imageData": {
@@ -87,7 +87,7 @@
   },
   "typesVersions": {
     "*": {
-      "full/zxing_full.wasm": [
+      "full/scanx_full.wasm": [
         "./dist/es/types/wasm.d.ts",
         "./dist/cjs/types/wasm.d.ts"
       ],
@@ -95,7 +95,7 @@
         "./dist/es/full/index.d.ts",
         "./dist/cjs/full/index.d.ts"
       ],
-      "reader/zxing_reader.wasm": [
+      "reader/scanx_reader.wasm": [
         "./dist/es/types/wasm.d.ts",
         "./dist/cjs/types/wasm.d.ts"
       ],
@@ -103,7 +103,7 @@
         "./dist/es/reader/index.d.ts",
         "./dist/cjs/reader/index.d.ts"
       ],
-      "writer/zxing_writer.wasm": [
+      "writer/scanx_writer.wasm": [
         "./dist/es/types/wasm.d.ts",
         "./dist/cjs/types/wasm.d.ts"
       ],
@@ -119,19 +119,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sec-ant/zxing-wasm.git"
+    "url": "git+https://github.com/Sec-ant/scanx-wasm.git"
   },
-  "homepage": "https://github.com/Sec-ant/zxing-wasm",
+  "homepage": "https://github.com/Sec-ant/scanx-wasm",
   "bugs": {
-    "url": "https://github.com/Sec-ant/zxing-wasm/issues",
+    "url": "https://github.com/Sec-ant/scanx-wasm/issues",
     "email": "zezhengwu@proton.me"
   },
   "keywords": [
     "qrcode",
     "barcode",
     "wasm",
-    "zxing",
-    "zxing-cpp",
+    "scanx",
+    "scanx-cpp",
     "esmodule",
     "webassembly"
   ],

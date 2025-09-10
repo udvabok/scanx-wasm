@@ -3,19 +3,10 @@ import { type WriterOptions, defaultWriterOptions as wo } from "./index.js";
 export const defaultWriterOptions: Required<WriterOptions> = { ...wo };
 
 export {
-  type BarcodeFormat,
-  barcodeFormats,
-  type CharacterSet,
-  characterSets,
-  type EcLevel,
+  barcodeFormats, characterSets, linearBarcodeFormats, matrixBarcodeFormats, type BarcodeFormat, type CharacterSet, type EcLevel,
   type LinearBarcodeFormat,
-  type LooseBarcodeFormat,
-  linearBarcodeFormats,
-  type MatrixBarcodeFormat,
-  matrixBarcodeFormats,
-  type WriteInputBarcodeFormat,
+  type LooseBarcodeFormat, type MatrixBarcodeFormat, type ScanXWriteResult, type ScanXWriterOptions, type WriteInputBarcodeFormat,
   type WriteResult,
-  type WriterOptions,
-  type ZXingWriteResult,
-  type ZXingWriterOptions,
+  type WriterOptions
 } from "./index.js";
+

@@ -4,7 +4,7 @@ import type { EcLevel } from "./ecLevel.js";
 /**
  * @internal
  */
-export interface ZXingWriterOptions {
+export interface ScanXWriterOptions {
   /**
    * @internal
    */
@@ -90,7 +90,7 @@ export interface ZXingWriterOptions {
  * Writer options for writing barcodes.
  */
 export interface WriterOptions
-  extends Partial<Omit<ZXingWriterOptions, "format">> {
+  extends Partial<Omit<ScanXWriterOptions, "format">> {
   /**
    * The format of the barcode to write.
    *
@@ -119,14 +119,14 @@ export const defaultWriterOptions: Required<WriterOptions> = {
 };
 
 /**
- * Converts WriterOptions to ZXingWriterOptions format.
+ * Converts WriterOptions to ScanXWriterOptions format.
  *
  * @param writerOptions - The required writer options to be converted
- * @returns A ZXingWriterOptions object with the encoded format
+ * @returns A ScanXWriterOptions object with the encoded format
  */
-export function writerOptionsToZXingWriterOptions(
+export function writerOptionsToScanXWriterOptions(
   writerOptions: Required<WriterOptions>,
-): ZXingWriterOptions {
+): ScanXWriterOptions {
   return {
     ...writerOptions,
     format: encodeFormat(writerOptions.format),

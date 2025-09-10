@@ -1,15 +1,15 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { beforeAll, describe, expect, test } from "vitest";
-import { prepareZXingModule, writeBarcode } from "../src/writer/index.js";
+import { prepareScanXModule, writeBarcode } from "../src/writer/index.js";
 
 describe("zxing/writer", async () => {
   beforeAll(async () => {
-    await prepareZXingModule({
+    await prepareScanXModule({
       overrides: {
         wasmBinary: (
           await readFile(
-            resolve(import.meta.dirname, "../src/writer/zxing_writer.wasm"),
+            resolve(import.meta.dirname, "../src/writer/scanx_writer.wasm"),
           )
         ).buffer as ArrayBuffer,
       },

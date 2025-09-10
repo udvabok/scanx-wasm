@@ -17,7 +17,7 @@ async function buildIife() {
                 [entryAlias]: entryPath,
               },
               formats: ["iife"],
-              name: "ZXingWASM",
+              name: "ScanXWASM",
             },
             rollupOptions: undefined,
             outDir: "dist/iife",
