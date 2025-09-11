@@ -109,9 +109,7 @@ prepareScanXModule({
 });
 
 Learn more:
-- https://developers.weixin.qq.com/miniprogram/dev/framework/performance/wasm.html
-- https://emscripten.org/docs/api_reference/module.html#Module.instantiateWasm
-- https://github.com/Sec-ant/scanx-wasm#integrating-in-non-web-runtimes
+- https://github.com/udvabok/scanx
 `,
             );
           },

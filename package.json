@@ -2,7 +2,7 @@
   "name": "scanx-wasm",
   "description": "Scanx-C++ WebAssembly as an ES/CJS module with types",
   "private": false,
-  "version": "2.2.13",
+  "version": "2.2.14",
   "type": "module",
   "files": [
     "./dist"

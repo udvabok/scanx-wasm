@@ -77,14 +77,26 @@ export function setScanXModuleOverrides(
 export async function readBarcodes(
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions?: ReaderOptions,
+  cdnHost?: string,
 ) {
-  return readBarcodesWithFactory(ScanXModuleFactory, input, readerOptions);
+  return readBarcodesWithFactory(
+    ScanXModuleFactory,
+    input,
+    readerOptions,
+    cdnHost,
+  );
 }
 export async function readSingleBarcode(
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions?: ReaderOptions,
+  cdnHost?: string,
 ) {
-  return readSingleBarcodeWithFactory(ScanXModuleFactory, input, readerOptions);
+  return readSingleBarcodeWithFactory(
+    ScanXModuleFactory,
+    input,
+    readerOptions,
+    cdnHost,
+  );
 }
 
 /**

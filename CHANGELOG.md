@@ -1,4 +1,4 @@
-# zxing-wasm
+# scanx-wasm
 
 ## 2.2.1
 
@@ -111,7 +111,7 @@ The `WriterOptions` object has also been updated completely.
 
 #### Redefined `BarcodeFormat`-Family Types
 
-`None` is removed from the `BarcodeFormat` union type. New types like `LinearBarcodeFormat`, `MatrixBarcodeFormat` and `LooseBarcodeFormat` are introduced. See [`barcodeFormat.ts`](https://github.com/Sec-ant/zxing-wasm/blob/main/src/bindings/barcodeFormat.ts) for more details.
+`None` is removed from the `BarcodeFormat` union type. New types like `LinearBarcodeFormat`, `MatrixBarcodeFormat` and `LooseBarcodeFormat` are introduced. See [`barcodeFormat.ts`](https://github.com/udvabok/scanx-wasm/blob/main/src/bindings/barcodeFormat.ts) for more details.
 
 ### New Features & Enhancements
 
@@ -127,13 +127,13 @@ The new `tryDenoise` option in `ReaderOptions` allows you to enable or disable t
 
 #### Fix TS `moduleResolution: node` Subpath Exports Resolution
 
-The subpath export types are now compatible with TypeScript's `moduleResolution: node` strategy by using the [types-versions-wildcards strategy](https://github.com/andrewbranch/example-subpath-exports-ts-compat/tree/main/examples/node_modules/types-versions-wildcards). This package now passes all the [`arethetypeswrong` checks](https://arethetypeswrong.github.io/?p=zxing-wasm%402.0.0).
+The subpath export types are now compatible with TypeScript's `moduleResolution: node` strategy by using the [types-versions-wildcards strategy](https://github.com/andrewbranch/example-subpath-exports-ts-compat/tree/main/examples/node_modules/types-versions-wildcards). This package now passes all the [`arethetypeswrong` checks](https://arethetypeswrong.github.io/?p=scanx-wasm%402.0.0).
 
 ## 2.0.0-beta.4
 
 ### Patch Changes
 
-- f8c33b2: Fix the `scanx_writer.wasm` size issue. See [#190](https://github.com/Sec-ant/zxing-wasm/discussions/190).
+- f8c33b2: Fix the `scanx_writer.wasm` size issue. See [#190](https://github.com/udvabok/scanx-wasm/discussions/190).
 
 ## 2.0.0-beta.3
 

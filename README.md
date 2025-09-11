@@ -2,11 +2,11 @@
 
 > [!NOTE]
 >
-> For the v1 release, please visit the [`channel/v1`](https://www.github.com/Sec-ant/scanx-wasm/tree/channel/v1) branch.
+> For the v1 release, please visit the [`channel/v1`](https://www.github.com/udvabok/scanx-wasm/tree/channel/v1) branch.
 
 # scanx-wasm
 
-[![npm](https://img.shields.io/npm/v/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![jsDelivr hits](https://img.shields.io/jsdelivr/npm/hm/scanx-wasm?color=%23ff5627)](https://cdn.jsdelivr.net/npm/scanx-wasm@latest/) [![deploy status](https://github.com/Sec-ant/scanx-wasm/actions/workflows/deploy.yml/badge.svg)](https://github.com/Sec-ant/scanx-wasm/actions/workflows/deploy.yml)
+[![npm](https://img.shields.io/npm/v/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![npm bundle size (scoped)](https://img.shields.io/bundlephobia/minzip/scanx-wasm)](https://www.npmjs.com/package/scanx-wasm/v/latest) [![jsDelivr hits](https://img.shields.io/jsdelivr/npm/hm/scanx-wasm?color=%23ff5627)](https://cdn.jsdelivr.net/npm/scanx-wasm@latest/) [![deploy status](https://github.com/udvabok/scanx-wasm/actions/workflows/deploy.yml/badge.svg)](https://github.com/udvabok/scanx-wasm/actions/workflows/deploy.yml)
 
 [ZXing-C++](https://github.com/zxing-cpp/zxing-cpp) WebAssembly as an ES/CJS module with types. Read or write barcodes in various JS runtimes: Web, Node.js, Bun, and Deno.
 
@@ -74,7 +74,7 @@ npm i scanx-wasm
 
 Demo page: https://scanx-wasm-demo.deno.dev/
 
-Demo source: https://github.com/Sec-ant/scanx-wasm-demo
+Demo source: https://github.com/udvabok/scanx-wasm-demo
 
 ## Usage
 
@@ -452,10 +452,10 @@ prepareScanXModule({
    ```
 
 3. **Are there any higher level libraries that can be used to simplify the usage of this library?**
-   - [barcode-detector](https://github.com/Sec-ant/barcode-detector): A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill / ponyfill that uses this library under the hood.
-   - [vue-qrcode-reader](https://github.com/gruhn/vue-qrcode-reader): A set of Vue.js components for detecting QR codes and various other barcode formats right in the browser which uses [barcode-detector](https://github.com/Sec-ant/barcode-detector) under the hood.
-   - [@yudiel/react-qr-scanner](https://github.com/yudielcurbelo/react-qr-scanner): A library to scan QR Codes in react which uses [barcode-detector](https://github.com/Sec-ant/barcode-detector) under the hood.
-   - [svelte-qrcode-reader](https://github.com/ollema/svelte-qrcode-reader): A set of Svelte 5 components for detecting and decoding QR-codes which uses [barcode-detector](https://github.com/Sec-ant/barcode-detector) under the hood.
+   - [barcode-detector](https://github.com/udvabok/barcode-detector): A [Barcode Detection API](https://wicg.github.io/shape-detection-api/#barcode-detection-api) polyfill / ponyfill that uses this library under the hood.
+   - [vue-qrcode-reader](https://github.com/gruhn/vue-qrcode-reader): A set of Vue.js components for detecting QR codes and various other barcode formats right in the browser which uses [barcode-detector](https://github.com/udvabok/barcode-detector) under the hood.
+   - [@yudiel/react-qr-scanner](https://github.com/yudielcurbelo/react-qr-scanner): A library to scan QR Codes in react which uses [barcode-detector](https://github.com/udvabok/barcode-detector) under the hood.
+   - [svelte-qrcode-reader](https://github.com/ollema/svelte-qrcode-reader): A set of Svelte 5 components for detecting and decoding QR-codes which uses [barcode-detector](https://github.com/udvabok/barcode-detector) under the hood.
 
    A React toolkit for scanning barcodes directly based on this library is planned, which aims to provide easy-to-use capabilities for interacting with web cameras.
 
@@ -476,6 +476,6 @@ prepareScanXModule({
 This project contains code from multiple sources, each with its own license:
 
 - [zxing-cpp](https://github.com/zxing-cpp/zxing-cpp): [Apache License 2.0](https://github.com/zxing-cpp/zxing-cpp/blob/master/LICENSE)
-- [src/cpp/ScanXWasm.cpp](https://github.com/Sec-ant/scanx-wasm/blob/main/src/cpp/ScanXWasm.cpp): [Apache License 2.0](https://github.com/Sec-ant/scanx-wasm/blob/main/src/cpp/LICENSE)
+- [src/cpp/ScanXWasm.cpp](https://github.com/udvabok/scanx-wasm/blob/main/src/cpp/ScanXWasm.cpp): [Apache License 2.0](https://github.com/udvabok/scanx-wasm/blob/main/src/cpp/LICENSE)
 - [zint](https://sourceforge.net/projects/zint/): [BSD 3-Clause License](https://sourceforge.net/p/zint/code/ci/master/tree/LICENSE)
-- scanx-wasm specific code: [MIT License](https://github.com/Sec-ant/scanx-wasm/blob/main/LICENSE)
+- scanx-wasm specific code: [MIT License](https://github.com/udvabok/scanx-wasm/blob/main/LICENSE)
