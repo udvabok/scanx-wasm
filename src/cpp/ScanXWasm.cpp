@@ -301,14 +301,6 @@ using JsReadResults = std::vector<JsReadResult>;
 
 JsReadResults readBarcodes(ZXing::ImageView imageView, const JsReaderOptions &jsReaderOptions) {
   try {
-    // Check access token status before reading barcodes
-    int accessTokenStatus = isAccessTokenIsValidToday(jsReaderOptions.accessToken).status;
-
-    // Only proceed if access token is valid
-    if (accessTokenStatus != 200) {
-      return {{.error = statusToMessage(accessTokenStatus), .message = statusToMessage(accessTokenStatus), .status = accessTokenStatus}};
-    }
-
     auto barcodes = ZXing::ReadBarcodes(
       imageView,
       ZXing::ReaderOptions()
