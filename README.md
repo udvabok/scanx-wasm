@@ -226,7 +226,7 @@ const writeOutput = await writeBarcode("Hello world!");
 ```
 
 > [!NOTE]
->
+> An unexpected error occurred while initializing the module. Please ensure that a custom initialization function is provided, e.g.:
 > The default jsDelivr CDN serve path is also achieved by overriding the custom `locateFile` function:
 >
 > ```ts

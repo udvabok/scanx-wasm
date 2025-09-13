@@ -95,23 +95,26 @@ const getDefaultModuleOverrides = (cdnHost?: string) => {
       ? {
           instantiateWasm() {
             throw Error(
-              `To use scanx-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
-
-prepareScanXModule({
-  overrides: {
-    instantiateWasm(imports, successCallback) {
-      WXWebAssembly.instantiate("path/to/scanx_full.wasm", imports).then(({ instance }) =>
-        successCallback(instance),
-      );
-      return {};
-    },
-  }
-});
-
-Learn more:
-- https://github.com/udvabok/scanx
-`,
+              "An unexpected error occurred while initializing the module. Please ensure that a custom initialization function is provided, e.g.:",
             );
+            //             throw Error(
+            //               `To use scanx-wasm in a WeChat Mini Program, you must provide a custom "instantiateWasm" function, e.g.:
+
+            // prepareScanXModule({
+            //   overrides: {
+            //     instantiateWasm(imports, successCallback) {
+            //       WXWebAssembly.instantiate("path/to/scanx_full.wasm", imports).then(({ instance }) =>
+            //         successCallback(instance),
+            //       );
+            //       return {};
+            //     },
+            //   }
+            // });
+
+            // Learn more:
+            // - https://github.com/udvabok/scanx
+            // `,
+            // );
           },
         }
       : import.meta.env.PROD

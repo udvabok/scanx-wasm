@@ -1,8 +1,8 @@
 {
   "name": "scanx-wasm",
-  "description": "Scanx-C++ WebAssembly as an ES/CJS module with types",
+  "description": "Scanx-C++ as an ES/CJS module with types",
   "private": false,
-  "version": "2.2.16",
+  "version": "2.2.18",
   "type": "module",
   "files": [
     "./dist"
@@ -132,8 +132,7 @@
     "wasm",
     "scanx",
     "scanx-cpp",
-    "esmodule",
-    "webassembly"
+    "esmodule"
   ],
   "author": {
     "name": "udvabok"
