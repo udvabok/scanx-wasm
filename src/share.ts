@@ -88,8 +88,8 @@ export type ScanXModuleOverrides = Partial<EmscriptenModule>;
 export const SCANX_WASM_VERSION = NPM_PACKAGE_VERSION;
 
 export const SCANX_CPP_COMMIT = SUBMODULE_COMMIT;
-
-const getDefaultModuleOverrides = (cdnHost?: string) => {
+export type CDNHost = string | undefined | null;
+const getDefaultModuleOverrides = (cdnHost?: CDNHost) => {
   const DEFAULT_MODULE_OVERRIDES: ScanXModuleOverrides =
     import.meta.env.MODE === "miniprogram"
       ? {
@@ -122,7 +122,7 @@ const getDefaultModuleOverrides = (cdnHost?: string) => {
             locateFile: (path, prefix) => {
               const match = path.match(/_(.+?)\.wasm$/);
               if (match) {
-                return `${cdnHost ?? `https://fastly.jsdelivr.net/npm/scanx-wasm@${NPM_PACKAGE_VERSION}`}/dist/${match[1]}/${path}`;
+                return `${cdnHost || `https://fastly.jsdelivr.net/npm/scanx-wasm@${NPM_PACKAGE_VERSION}`}/dist/${match[1]}/${path}`;
               }
               return prefix + path;
             },
@@ -157,7 +157,7 @@ export interface PrepareScanXModuleOptions {
    * If provided, this will override the default jsDelivr CDN URL.
    * @example "https://my-custom-cdn.com/scanx-wasm"
    */
-  cdnHost?: string;
+  cdnHost?: CDNHost;
   /**
    * A function to compare the cached overrides with the input overrides.
    * So that the module promise can be reused if the overrides are the same.
@@ -317,7 +317,7 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions: ReaderOptions = defaultReaderOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   const requiredReaderOptions: Required<ReaderOptions> = {
     ...defaultReaderOptions,
@@ -395,7 +395,7 @@ export async function readSingleBarcodeWithFactory<T extends "reader" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions: ReaderOptions = defaultReaderOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   const requiredReaderOptions: Required<ReaderOptions> = {
     ...defaultReaderOptions,
@@ -497,7 +497,7 @@ export async function writeBarcodeWithFactory<T extends "writer" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: string | Uint8Array,
   writerOptions: WriterOptions = defaultWriterOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   const requiredWriterOptions: Required<WriterOptions> = {
     ...defaultWriterOptions,

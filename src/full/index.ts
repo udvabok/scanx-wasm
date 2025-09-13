@@ -1,6 +1,7 @@
 import type { Merge } from "type-fest";
 import type { ReaderOptions, WriterOptions } from "../bindings/index.js";
 import {
+  type CDNHost,
   type PrepareScanXModuleOptions,
   prepareScanXModuleWithFactory,
   purgeScanXModuleWithFactory,
@@ -77,7 +78,7 @@ export function setScanXModuleOverrides(
 export async function readBarcodes(
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions?: ReaderOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   return readBarcodesWithFactory(
     ScanXModuleFactory,
@@ -89,7 +90,7 @@ export async function readBarcodes(
 export async function readSingleBarcode(
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
   readerOptions?: ReaderOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   return readSingleBarcodeWithFactory(
     ScanXModuleFactory,

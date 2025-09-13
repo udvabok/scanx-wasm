@@ -8,6 +8,7 @@
 import type { Merge } from "type-fest";
 import type { WriterOptions } from "../bindings/index.js";
 import {
+  type CDNHost,
   type PrepareScanXModuleOptions,
   prepareScanXModuleWithFactory,
   purgeScanXModuleWithFactory,
@@ -82,7 +83,7 @@ export function setScanXModuleOverrides(
 export async function writeBarcode(
   input: string | Uint8Array,
   writerOptions?: WriterOptions,
-  cdnHost?: string,
+  cdnHost?: CDNHost,
 ) {
   return writeBarcodeWithFactory(
     ScanXModuleFactory,
