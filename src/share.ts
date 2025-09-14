@@ -394,12 +394,16 @@ export async function readBarcodesWithFactory<T extends "reader" | "full">(
 export async function readSingleBarcodeWithFactory<T extends "reader" | "full">(
   ScanXModuleFactory: ScanXModuleFactory<T>,
   input: Blob | ArrayBuffer | Uint8Array | ImageData,
-  readerOptions: ReaderOptions = defaultReaderOptions,
+  readerOptions: Omit<
+    ReaderOptions,
+    "maxNumberOfSymbols"
+  > = defaultReaderOptions,
   cdnHost?: CDNHost,
 ) {
   const requiredReaderOptions: Required<ReaderOptions> = {
     ...defaultReaderOptions,
     ...readerOptions,
+    maxNumberOfSymbols: 1,
   };
 
   const ScanXModule = await prepareScanXModuleWithFactory(ScanXModuleFactory, {
